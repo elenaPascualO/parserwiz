@@ -117,10 +117,10 @@ async function processFile(file, page = 1) {
         const data = await response.json()
         showPreview(file, data)
     } catch (error) {
-        showError(error.message)
         if (page === 1) {
             resetUI()
         }
+        showError(error.message)
     } finally {
         hideLoading()
     }
