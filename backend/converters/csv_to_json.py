@@ -34,30 +34,52 @@ class CsvToJsonConverter(BaseConverter):
                     record[key] = None
         return json.dumps(records, indent=2, ensure_ascii=False).encode("utf-8")
 
-    def preview(self, content: bytes, rows: int = 10) -> dict[str, Any]:
-        """Generate preview of CSV data.
+    def preview(
+        self, content: bytes, page: int = 1, page_size: int = 10
+    ) -> dict[str, Any]:
+        """Generate preview of CSV data with pagination.
 
         Args:
             content: CSV content as bytes.
-            rows: Maximum rows to preview.
+            page: Page number (1-indexed). Defaults to 1.
+            page_size: Number of rows per page. Defaults to 10.
 
         Returns:
-            Preview dictionary with columns, rows, and total_rows.
+            Preview dictionary with columns, rows, total_rows, and pagination info.
         """
-        df = self._csv_to_dataframe(content)
-        # Replace NaN with None for JSON serialization
-        preview_df = df.head(rows).where(pd.notna(df.head(rows)), None)
+        # Read as strings to preserve original formatting (e.g., "007" stays "007")
+        df = self._csv_to_dataframe(content, dtype=str)
+        total_rows = len(df)
+        total_pages = max(1, (total_rows + page_size - 1) // page_size)
+
+        # Ensure page is within bounds
+        page = max(1, min(page, total_pages))
+
+        # Calculate slice indices
+        start_idx = (page - 1) * page_size
+        end_idx = start_idx + page_size
+
+        # Get the page slice and replace NaN with None
+        page_df = df.iloc[start_idx:end_idx]
+        page_df = page_df.where(pd.notna(page_df), None)
+
         return {
             "columns": df.columns.tolist(),
-            "rows": preview_df.values.tolist(),
-            "total_rows": len(df),
+            "rows": page_df.values.tolist(),
+            "total_rows": total_rows,
+            "current_page": page,
+            "total_pages": total_pages,
+            "page_size": page_size,
         }
 
-    def _csv_to_dataframe(self, content: bytes) -> pd.DataFrame:
+    def _csv_to_dataframe(
+        self, content: bytes, dtype: type | None = None
+    ) -> pd.DataFrame:
         """Parse CSV content to DataFrame with auto-detected delimiter.
 
         Args:
             content: CSV content as bytes.
+            dtype: Data type to force for all columns (e.g., str for preview).
 
         Returns:
             A pandas DataFrame.
@@ -75,20 +97,38 @@ class CsvToJsonConverter(BaseConverter):
                 continue
 
         if text is None:
-            raise ValueError("Could not decode file. Unsupported encoding.")
+            raise ValueError(
+                "Unable to read file: unsupported character encoding. "
+                "Please save the file as UTF-8 and try again."
+            )
 
         # Auto-detect delimiter
         delimiter = self._detect_delimiter(text)
 
         try:
-            df = pd.read_csv(io.StringIO(text), sep=delimiter)
+            df = pd.read_csv(io.StringIO(text), sep=delimiter, dtype=dtype)
         except pd.errors.EmptyDataError:
-            raise ValueError("CSV file is empty")
+            raise ValueError(
+                "CSV file is empty. The file contains no data to convert."
+            )
         except pd.errors.ParserError as e:
-            raise ValueError(f"Invalid CSV format: {e}") from e
+            error_msg = str(e)
+            # Extract row number if present in error
+            if "line" in error_msg.lower():
+                raise ValueError(
+                    f"CSV parsing error: {error_msg}. "
+                    f"Check that all rows have the same number of columns."
+                ) from e
+            raise ValueError(
+                f"Invalid CSV format: {error_msg}. "
+                f"Ensure the file is a valid CSV with consistent delimiters."
+            ) from e
 
         if df.empty:
-            raise ValueError("CSV file has no data rows")
+            raise ValueError(
+                "CSV file has headers but no data rows. "
+                "Please add data below the header row."
+            )
 
         return df
 

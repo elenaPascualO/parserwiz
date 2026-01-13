@@ -23,19 +23,25 @@ class BaseConverter(ABC):
         pass
 
     @abstractmethod
-    def preview(self, content: bytes, rows: int = 10) -> dict[str, Any]:
-        """Generate a preview of the file content.
+    def preview(
+        self, content: bytes, page: int = 1, page_size: int = 10
+    ) -> dict[str, Any]:
+        """Generate a preview of the file content with pagination.
 
         Args:
             content: The file content as bytes.
-            rows: Maximum number of rows to include in preview.
+            page: Page number (1-indexed). Defaults to 1.
+            page_size: Number of rows per page. Defaults to 10.
 
         Returns:
             A dictionary with preview data:
             {
                 "columns": ["col1", "col2", ...],
                 "rows": [["val1", "val2", ...], ...],
-                "total_rows": 100
+                "total_rows": 100,
+                "current_page": 1,
+                "total_pages": 10,
+                "page_size": 10
             }
         """
         pass

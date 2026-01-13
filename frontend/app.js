@@ -16,17 +16,27 @@ const convertButtons = document.getElementById('convert-buttons')
 const resetButton = document.getElementById('reset-button')
 const loadingOverlay = document.getElementById('loading')
 const errorMessage = document.getElementById('error-message')
+const prevPageBtn = document.getElementById('prev-page')
+const nextPageBtn = document.getElementById('next-page')
+const pageInfo = document.getElementById('page-info')
 
 // Conversion options per file type
 const CONVERSION_OPTIONS = {
     json: ['CSV', 'Excel'],
-    csv: ['JSON'],
-    xlsx: ['JSON'],
-    xls: ['JSON']
+    csv: ['JSON', 'Excel'],
+    xlsx: ['JSON', 'CSV'],
+    xls: ['JSON', 'CSV']
 }
 
 // Current file reference
 let currentFile = null
+
+// Pagination state
+let currentPage = 1
+let totalPages = 1
+let pageSize = 500
+let cachedColumns = []
+let cachedDetectedType = null
 
 // Initialize event listeners
 function init() {
@@ -41,6 +51,10 @@ function init() {
 
     // Reset button
     resetButton.addEventListener('click', resetUI)
+
+    // Pagination buttons
+    prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1))
+    nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1))
 }
 
 // Handle drag over
@@ -78,14 +92,17 @@ function handleFileSelect(e) {
 }
 
 // Process uploaded file
-async function processFile(file) {
+async function processFile(file, page = 1) {
     currentFile = file
+    currentPage = page
     showLoading()
     hideError()
 
     try {
         const formData = new FormData()
         formData.append('file', file)
+        formData.append('page', page)
+        formData.append('page_size', pageSize)
 
         const response = await fetch(`${API_BASE}/preview`, {
             method: 'POST',
@@ -101,10 +118,18 @@ async function processFile(file) {
         showPreview(file, data)
     } catch (error) {
         showError(error.message)
-        resetUI()
+        if (page === 1) {
+            resetUI()
+        }
     } finally {
         hideLoading()
     }
+}
+
+// Go to specific page
+async function goToPage(page) {
+    if (!currentFile || page < 1 || page > totalPages) return
+    await processFile(currentFile, page)
 }
 
 // Show preview section with data
@@ -113,9 +138,19 @@ function showPreview(file, data) {
     fileName.textContent = file.name
     fileType.textContent = data.detected_type.toUpperCase()
 
-    // Update row count
-    const previewCount = data.rows.length
-    rowCount.textContent = `Showing ${previewCount} of ${data.total_rows} rows`
+    // Update pagination state
+    currentPage = data.current_page || 1
+    totalPages = data.total_pages || 1
+    cachedColumns = data.columns
+    cachedDetectedType = data.detected_type
+
+    // Update row count with range info
+    const startRow = (currentPage - 1) * pageSize + 1
+    const endRow = Math.min(startRow + data.rows.length - 1, data.total_rows)
+    rowCount.textContent = `Showing ${startRow}-${endRow} of ${data.total_rows} rows`
+
+    // Update pagination controls
+    updatePaginationControls()
 
     // Build table header
     tableHead.innerHTML = ''
@@ -146,6 +181,19 @@ function showPreview(file, data) {
     // Show preview section, hide upload section
     uploadSection.classList.add('hidden')
     previewSection.classList.remove('hidden')
+
+    // Scroll table to top
+    const tableContainer = document.querySelector('.table-container')
+    if (tableContainer) {
+        tableContainer.scrollTop = 0
+    }
+}
+
+// Update pagination controls state
+function updatePaginationControls() {
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`
+    prevPageBtn.disabled = currentPage <= 1
+    nextPageBtn.disabled = currentPage >= totalPages
 }
 
 // Format cell value for display
@@ -239,6 +287,10 @@ function downloadBlob(blob, filename) {
 function resetUI() {
     currentFile = null
     fileInput.value = ''
+    currentPage = 1
+    totalPages = 1
+    cachedColumns = []
+    cachedDetectedType = null
     uploadSection.classList.remove('hidden')
     previewSection.classList.add('hidden')
     hideError()

@@ -29,21 +29,40 @@ class JsonToCsvConverter(BaseConverter):
         df.to_csv(output, index=False)
         return output.getvalue().encode("utf-8")
 
-    def preview(self, content: bytes, rows: int = 10) -> dict[str, Any]:
-        """Generate preview of JSON data.
+    def preview(
+        self, content: bytes, page: int = 1, page_size: int = 10
+    ) -> dict[str, Any]:
+        """Generate preview of JSON data with pagination.
 
         Args:
             content: JSON content as bytes.
-            rows: Maximum rows to preview.
+            page: Page number (1-indexed). Defaults to 1.
+            page_size: Number of rows per page. Defaults to 10.
 
         Returns:
-            Preview dictionary with columns, rows, and total_rows.
+            Preview dictionary with columns, rows, total_rows, and pagination info.
         """
         df = self._json_to_dataframe(content)
+        total_rows = len(df)
+        total_pages = max(1, (total_rows + page_size - 1) // page_size)
+
+        # Ensure page is within bounds
+        page = max(1, min(page, total_pages))
+
+        # Calculate slice indices
+        start_idx = (page - 1) * page_size
+        end_idx = start_idx + page_size
+
+        # Get the page slice
+        page_df = df.iloc[start_idx:end_idx]
+
         return {
             "columns": df.columns.tolist(),
-            "rows": df.head(rows).values.tolist(),
-            "total_rows": len(df),
+            "rows": page_df.values.tolist(),
+            "total_rows": total_rows,
+            "current_page": page,
+            "total_pages": total_pages,
+            "page_size": page_size,
         }
 
     def _json_to_dataframe(self, content: bytes) -> pd.DataFrame:
@@ -63,17 +82,29 @@ class JsonToCsvConverter(BaseConverter):
         try:
             text = content.decode("utf-8")
         except UnicodeDecodeError as e:
-            raise ValueError(f"Invalid encoding: {e}") from e
+            raise ValueError(
+                f"File encoding error: Unable to decode as UTF-8. "
+                f"Please ensure the file is saved with UTF-8 encoding. Details: {e}"
+            ) from e
 
         try:
             data = json.loads(text)
         except json.JSONDecodeError as e:
-            raise ValueError(f"Invalid JSON: {e.msg}") from e
+            raise ValueError(
+                f"Invalid JSON at line {e.lineno}, column {e.colno}: {e.msg}"
+            ) from e
 
         # Handle different JSON structures
         if isinstance(data, list):
             if not data:
-                raise ValueError("JSON array is empty")
+                raise ValueError(
+                    "JSON array is empty. The file contains '[]' with no data."
+                )
+            # Check if items are objects
+            if not all(isinstance(item, dict) for item in data):
+                raise ValueError(
+                    "JSON array must contain objects. Found non-object items in array."
+                )
             # Flatten first level of nesting
             flattened = [self._flatten_dict(item) for item in data]
             return pd.DataFrame(flattened)
@@ -82,13 +113,17 @@ class JsonToCsvConverter(BaseConverter):
             # Try to find an array value to use as data
             for value in data.values():
                 if isinstance(value, list) and value:
-                    flattened = [self._flatten_dict(item) for item in value]
-                    return pd.DataFrame(flattened)
+                    if all(isinstance(item, dict) for item in value):
+                        flattened = [self._flatten_dict(item) for item in value]
+                        return pd.DataFrame(flattened)
             # Single object - convert to single row
             flattened = self._flatten_dict(data)
             return pd.DataFrame([flattened])
         else:
-            raise ValueError("JSON must be an array of objects or an object")
+            raise ValueError(
+                f"Invalid JSON structure. Expected an array of objects or an object, "
+                f"but got {type(data).__name__}."
+            )
 
     def _flatten_dict(self, d: dict[str, Any], parent_key: str = "") -> dict[str, Any]:
         """Flatten a dictionary by one level of nesting.

@@ -1,7 +1,6 @@
 """JSON to Excel converter."""
 
 import io
-from typing import Any
 
 import pandas as pd
 

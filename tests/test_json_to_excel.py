@@ -39,13 +39,18 @@ class TestJsonToExcelConverter:
         assert "address.city" in df.columns
 
     def test_preview_simple_json(self, simple_json: bytes):
-        """Test preview generation."""
-        result = self.converter.preview(simple_json, rows=2)
+        """Test preview generation with pagination."""
+        result = self.converter.preview(simple_json, page=1, page_size=2)
 
         assert "columns" in result
         assert "rows" in result
         assert "total_rows" in result
+        assert "current_page" in result
+        assert "total_pages" in result
+        assert "page_size" in result
         assert len(result["rows"]) == 2
+        assert result["current_page"] == 1
+        assert result["total_pages"] == 2
 
     def test_excel_has_data_sheet(self, simple_json: bytes):
         """Test that Excel file has sheet named 'Data'."""

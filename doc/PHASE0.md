@@ -215,16 +215,23 @@ Get file preview without converting.
 
 ---
 
-## Improvements Needed
+## Improvements Completed
 
-Issues identified during usage that should be addressed:
+Issues identified during usage that have been addressed:
 
 ### Frontend / Preview
 
-- [ ] **Pagination for large files**: Currently only shows first 10 rows with no scroll or pagination options. Tested with 14k rows CSV - need ability to navigate through all data.
-- [ ] **Preserve data exactly as in file**: Frontend removes leading zeroes from numbers (e.g., "007" becomes "7"). Preview should display data exactly as it appears in the original file.
+- [x] **Pagination for large files**: Added Previous/Next pagination controls with page indicator. Users can navigate through all data rows (10 per page by default, max 100).
+- [x] **Preserve data exactly as in file**: Preview now reads all data as strings, preserving leading zeroes (e.g., "007" stays "007").
 
 ### New Conversions
 
-- [ ] **CSV → Excel**: Convert CSV files to .xlsx format
-- [ ] **Excel → CSV**: Convert .xlsx/.xls files to CSV format
+- [x] **CSV → Excel**: Convert CSV files to .xlsx format
+- [x] **Excel → CSV**: Convert .xlsx/.xls files to CSV format
+
+### Error Handling
+
+- [x] **Show detailed errors for malformed files**: Improved error messages with specific details:
+  - JSON: Shows line and column number of syntax errors
+  - CSV: Explains encoding issues, parsing errors with row context
+  - Excel: Explains if file is corrupted, password-protected, or wrong format

@@ -9,7 +9,9 @@ from fastapi.staticfiles import StaticFiles
 
 from backend.config import ALLOWED_CONVERSIONS, CORS_ORIGINS, MIME_TYPES, PREVIEW_ROWS
 from backend.converters import (
+    CsvToExcelConverter,
     CsvToJsonConverter,
+    ExcelToCsvConverter,
     ExcelToJsonConverter,
     JsonToCsvConverter,
     JsonToExcelConverter,
@@ -37,8 +39,11 @@ CONVERTERS = {
     ("json", "csv"): JsonToCsvConverter(),
     ("json", "xlsx"): JsonToExcelConverter(),
     ("csv", "json"): CsvToJsonConverter(),
+    ("csv", "xlsx"): CsvToExcelConverter(),
     ("xlsx", "json"): ExcelToJsonConverter(),
+    ("xlsx", "csv"): ExcelToCsvConverter(),
     ("xls", "json"): ExcelToJsonConverter(),
+    ("xls", "csv"): ExcelToCsvConverter(),
 }
 
 # Preview converters (one per input type)
@@ -61,20 +66,35 @@ async def health_check() -> dict[str, str]:
 
 
 @app.post("/api/preview")
-async def preview_file(file: UploadFile = File(...)) -> dict:
-    """Preview file data.
+async def preview_file(
+    file: UploadFile = File(...),
+    page: int = Form(default=1),
+    page_size: int = Form(default=PREVIEW_ROWS),
+) -> dict:
+    """Preview file data with pagination support.
 
     Args:
         file: The uploaded file.
+        page: Page number (1-indexed). Defaults to 1.
+        page_size: Number of rows per page. Defaults to PREVIEW_ROWS (10).
 
     Returns:
-        Preview data with columns, rows, total_rows, and detected_type.
+        Preview data with columns, rows, total_rows, detected_type,
+        current_page, total_pages, and page_size.
 
     Raises:
         HTTPException: If file is invalid or cannot be previewed.
     """
     content = await file.read()
     filename = file.filename or "unknown"
+
+    # Validate pagination parameters
+    if page < 1:
+        page = 1
+    if page_size < 1:
+        page_size = PREVIEW_ROWS
+    if page_size > 100:
+        page_size = 100  # Cap at 100 rows per page
 
     # Validate file
     is_valid, error = validate_file(content, filename)
@@ -94,7 +114,7 @@ async def preview_file(file: UploadFile = File(...)) -> dict:
         )
 
     try:
-        preview_data = converter.preview(content, rows=PREVIEW_ROWS)
+        preview_data = converter.preview(content, page=page, page_size=page_size)
         preview_data["detected_type"] = file_type
         return preview_data
     except ValueError as e:

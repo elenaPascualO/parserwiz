@@ -14,16 +14,16 @@ ALLOWED_EXTENSIONS: set[str] = {".json", ".csv", ".xlsx", ".xls"}
 # Allowed output formats per input type
 ALLOWED_CONVERSIONS: dict[str, list[str]] = {
     "json": ["csv", "xlsx"],
-    "csv": ["json"],
-    "xlsx": ["json"],
-    "xls": ["json"],
+    "csv": ["json", "xlsx"],
+    "xlsx": ["json", "csv"],
+    "xls": ["json", "csv"],
 }
 
 # Max file size in bytes (10MB)
 MAX_FILE_SIZE: int = 10 * 1024 * 1024
 
 # Preview settings
-PREVIEW_ROWS: int = 10
+PREVIEW_ROWS: int = 500
 
 # CORS settings
 CORS_ORIGINS: list[str] = [

@@ -50,7 +50,9 @@ backend/
 │   ├── json_to_csv.py
 │   ├── json_to_excel.py
 │   ├── csv_to_json.py
-│   └── excel_to_json.py
+│   ├── csv_to_excel.py
+│   ├── excel_to_json.py
+│   └── excel_to_csv.py
 └── utils/
     ├── file_detection.py   # Detect file type
     └── validators.py       # Validate JSON, etc.
@@ -58,15 +60,15 @@ backend/
 
 ### API Endpoints
 - `POST /api/convert` - Convert file (multipart file + output_format string)
-- `POST /api/preview` - Preview file data (returns first 10 rows)
+- `POST /api/preview` - Preview file data with pagination (page, page_size params)
 - `GET /api/health` - Health check
 
 ### Supported Conversions (Phase 0)
 | Input | Output |
 |-------|--------|
 | JSON  | CSV, XLSX |
-| CSV   | JSON |
-| XLSX/XLS | JSON |
+| CSV   | JSON, XLSX |
+| XLSX/XLS | JSON, CSV |
 
 ## Code Conventions
 

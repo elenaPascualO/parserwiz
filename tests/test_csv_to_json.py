@@ -28,16 +28,22 @@ class TestCsvToJsonConverter:
         assert data[0]["city"] == "New York"
 
     def test_preview_simple_csv(self, simple_csv: bytes):
-        """Test preview generation."""
-        result = self.converter.preview(simple_csv, rows=2)
+        """Test preview generation with pagination."""
+        result = self.converter.preview(simple_csv, page=1, page_size=2)
 
         assert "columns" in result
         assert "rows" in result
         assert "total_rows" in result
+        assert "current_page" in result
+        assert "total_pages" in result
+        assert "page_size" in result
 
         assert result["columns"] == ["name", "age", "city"]
         assert len(result["rows"]) == 2
         assert result["total_rows"] == 3
+        assert result["current_page"] == 1
+        assert result["total_pages"] == 2
+        assert result["page_size"] == 2
 
     def test_detect_semicolon_delimiter(self):
         """Test auto-detection of semicolon delimiter."""
@@ -70,3 +76,13 @@ class TestCsvToJsonConverter:
 
         assert data[0]["city"] is None
         assert data[1]["age"] is None
+
+    def test_preview_preserves_leading_zeros(self):
+        """Test that preview preserves leading zeros (e.g., '007' stays '007')."""
+        csv_with_zeros = b"code,name\n007,James Bond\n001,Agent One\n099,Agent Ninety-Nine"
+        result = self.converter.preview(csv_with_zeros, page=1, page_size=10)
+
+        # The preview should preserve "007" as a string, not convert to 7
+        assert result["rows"][0][0] == "007"
+        assert result["rows"][1][0] == "001"
+        assert result["rows"][2][0] == "099"
