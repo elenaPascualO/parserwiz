@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataToolkit - Convert JSON, CSV, Excel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>DataToolkit</h1>
+            <p class="subtitle">Convert your data files instantly</p>
+        </header>
+
+        <main>
+            <!-- Upload Section -->
+            <section id="upload-section" class="upload-section">
+                <div id="drop-zone" class="drop-zone">
+                    <div class="drop-zone-content">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        <p class="drop-text">Drop your file here</p>
+                        <p class="drop-subtext">JSON, CSV or Excel</p>
+                        <span class="drop-divider">or</span>
+                        <label class="file-button">
+                            Select file
+                            <input type="file" id="file-input" accept=".json,.csv,.xlsx,.xls" hidden>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Preview Section (hidden by default) -->
+            <section id="preview-section" class="preview-section hidden">
+                <div class="file-info">
+                    <span id="file-name" class="file-name"></span>
+                    <span id="file-type" class="file-type"></span>
+                </div>
+
+                <div class="preview-header">
+                    <h2>Preview</h2>
+                    <span id="row-count" class="row-count"></span>
+                </div>
+
+                <div class="table-container">
+                    <table id="preview-table">
+                        <thead id="table-head"></thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+
+                <div class="convert-section">
+                    <p class="convert-label">Convert to:</p>
+                    <div id="convert-buttons" class="convert-buttons"></div>
+                </div>
+
+                <button id="reset-button" class="reset-button">Upload another file</button>
+            </section>
+
+            <!-- Loading Overlay -->
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Processing...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error-message" class="error-message hidden"></div>
+        </main>
+
+        <footer>
+            <p>DataToolkit &copy; 2026</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -18,11 +18,11 @@ Launch a functional MVP to validate real demand for a JSON ↔ CSV ↔ Excel con
 
 ### Characteristics
 
-- [ ] **File upload**: drag & drop or file selector button
-- [ ] **Data preview**: show first 10 rows in HTML table
-- [ ] **Direct download**: converted file ready to download
-- [ ] **No registration**: completely anonymous usage
-- [ ] **No initial limits**: any (reasonable) size for now
+- [x] **File upload**: drag & drop or file selector button
+- [x] **Data preview**: show first 10 rows in HTML table
+- [x] **Direct download**: converted file ready to download
+- [x] **No registration**: completely anonymous usage
+- [x] **No initial limits**: any (reasonable) size for now
 
 ---
 
@@ -161,29 +161,29 @@ Get file preview without converting.
 
 ## Development Tasks
 
-### Backend (3-5 days)
-- [ ] Setup FastAPI project
-- [ ] Implement json_to_csv.py
-- [ ] Implement json_to_excel.py
-- [ ] Implement csv_to_json.py
-- [ ] Implement excel_to_json.py
-- [ ] Implement automatic file type detection
-- [ ] Implement /convert endpoint
-- [ ] Implement /preview endpoint
-- [ ] Basic tests for each converter
-- [ ] Error handling (invalid file, malformed JSON, etc.)
+### Backend
+- [x] Setup FastAPI project
+- [x] Implement json_to_csv.py
+- [x] Implement json_to_excel.py
+- [x] Implement csv_to_json.py
+- [x] Implement excel_to_json.py
+- [x] Implement automatic file type detection
+- [x] Implement /convert endpoint
+- [x] Implement /preview endpoint
+- [x] Basic tests for each converter (31 tests passing)
+- [x] Error handling (invalid file, malformed JSON, etc.)
 
-### Frontend (2-3 days)
-- [ ] Basic HTML structure
-- [ ] Clean and minimalist CSS styles
-- [ ] JS: file drag & drop
-- [ ] JS: call /preview and display table
-- [ ] JS: call /convert and trigger download
-- [ ] Loading states (spinner)
-- [ ] User-friendly error messages
+### Frontend
+- [x] Basic HTML structure
+- [x] Clean and minimalist CSS styles
+- [x] JS: file drag & drop
+- [x] JS: call /preview and display table
+- [x] JS: call /convert and trigger download
+- [x] Loading states (spinner)
+- [x] User-friendly error messages
 
-### DevOps (1 day)
-- [ ] Setup Git repository
+### DevOps
+- [x] Setup Git repository
 - [ ] Configure deploy on Railway/Render/Fly.io
 - [ ] Domain (can be free subdomain initially)
 - [ ] HTTPS
@@ -192,14 +192,14 @@ Get file preview without converting.
 
 ## "Done" Criteria for Phase 0
 
-- [ ] I can upload a JSON and download CSV
-- [ ] I can upload a JSON and download Excel
-- [ ] I can upload a CSV and download JSON
-- [ ] I can upload an Excel and download JSON
-- [ ] I see a preview of my data before converting
+- [x] I can upload a JSON and download CSV
+- [x] I can upload a JSON and download Excel
+- [x] I can upload a CSV and download JSON
+- [x] I can upload an Excel and download JSON
+- [x] I see a preview of my data before converting
 - [ ] The web is deployed and publicly accessible
-- [ ] Works on mobile (basic responsive)
-- [ ] No obvious errors in console
+- [x] Works on mobile (basic responsive)
+- [x] No obvious errors in console
 
 ---
 
@@ -212,3 +212,19 @@ Get file preview without converting.
 - Delimiter selection
 - Advanced analytics
 - Documented public API
+
+---
+
+## Improvements Needed
+
+Issues identified during usage that should be addressed:
+
+### Frontend / Preview
+
+- [ ] **Pagination for large files**: Currently only shows first 10 rows with no scroll or pagination options. Tested with 14k rows CSV - need ability to navigate through all data.
+- [ ] **Preserve data exactly as in file**: Frontend removes leading zeroes from numbers (e.g., "007" becomes "7"). Preview should display data exactly as it appears in the original file.
+
+### New Conversions
+
+- [ ] **CSV → Excel**: Convert CSV files to .xlsx format
+- [ ] **Excel → CSV**: Convert .xlsx/.xls files to CSV format

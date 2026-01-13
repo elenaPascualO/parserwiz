@@ -5,17 +5,17 @@ Web tool for conversion, cleaning, and manipulation of tabular data (JSON, CSV, 
 
 ---
 
-## Phase 0 — MVP 
+## Phase 0 — MVP (Complete)
 **Goal:** Minimum functional product to validate demand.
 
-- [ ] JSON → CSV
-- [ ] JSON → Excel (.xlsx)
-- [ ] CSV → JSON
-- [ ] Excel → JSON
-- [ ] Data preview (first 10 rows)
-- [ ] Basic and functional UI
+- [x] JSON → CSV
+- [x] JSON → Excel (.xlsx)
+- [x] CSV → JSON
+- [x] Excel → JSON
+- [x] Data preview (first 10 rows)
+- [x] Basic and functional UI
 
-**Expected outcome:** Deployed web app, measure first visits and conversions.
+**Status:** Backend and frontend complete. 31 tests passing. Pending: deployment.
 
 ---
 

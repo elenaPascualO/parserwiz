@@ -40,7 +40,7 @@ uv run ruff check backend/ --fix
 
 ## Architecture
 
-### Backend Structure (target)
+### Backend Structure
 ```
 backend/
 ├── main.py                 # FastAPI app, main routes

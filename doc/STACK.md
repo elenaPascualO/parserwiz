@@ -4,9 +4,9 @@
 
 | Layer | Technology |
 |-------|------------|
-| Backend | Python 3.11+ / FastAPI |
+| Backend | Python 3.13+ / FastAPI |
 | Frontend | HTML + CSS + Vanilla JS |
-| Data Processing | pandas, openpyxl |
+| Data Processing | pandas, openpyxl, xlrd |
 | Package Manager | uv |
 | Deploy | Railway / Render / Fly.io |
 | Version Control | Git + GitHub |
@@ -27,10 +27,10 @@
 # pyproject.toml
 
 [project]
-name = "datatoolkit"
+name = "data-toolkit"
 version = "0.1.0"
-description = "Web tool for data conversion and manipulation"
-requires-python = ">=3.11"
+description = "Web tool for conversion, cleaning, and manipulation of tabular data"
+requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.109.0",
     "uvicorn[standard]>=0.27.0",
