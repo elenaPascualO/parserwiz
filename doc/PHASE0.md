@@ -170,7 +170,7 @@ Get file preview without converting.
 - [x] Implement automatic file type detection
 - [x] Implement /convert endpoint
 - [x] Implement /preview endpoint
-- [x] Basic tests for each converter (31 tests passing)
+- [x] Basic tests for each converter (74 tests passing)
 - [x] Error handling (invalid file, malformed JSON, etc.)
 
 ### Frontend
@@ -235,3 +235,12 @@ Issues identified during usage that have been addressed:
   - JSON: Shows line and column number of syntax errors
   - CSV: Explains encoding issues, parsing errors with row context
   - Excel: Explains if file is corrupted, password-protected, or wrong format
+
+### Security (P0)
+
+- [x] **Filename sanitization**: Prevents header injection via Content-Disposition
+- [x] **Security headers middleware**: X-Frame-Options, X-Content-Type-Options, CSP
+- [x] **Production CORS**: Environment-based CORS configuration
+- [x] **Security tests**: 20 tests covering security features
+
+See `doc/SPECIFICATIONS.md` for full security specifications.

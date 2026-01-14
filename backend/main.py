@@ -17,6 +17,7 @@ from backend.converters import (
     JsonToExcelConverter,
 )
 from backend.utils.file_detection import detect_file_type
+from backend.utils.security import SecurityHeadersMiddleware, encode_filename_header
 from backend.utils.validators import validate_file
 
 app = FastAPI(
@@ -25,13 +26,16 @@ app = FastAPI(
     version="0.1.0",
 )
 
+# Security headers middleware (should be added first to apply to all responses)
+app.add_middleware(SecurityHeadersMiddleware)
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_credentials=False,  # No cookies needed
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
 
 # Converter registry
@@ -176,17 +180,20 @@ async def convert_file(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
-    # Generate output filename
+    # Generate output filename (sanitized for security)
     base_name = Path(filename).stem
     output_filename = f"{base_name}.{output_format}"
 
     # Get MIME type
     mime_type = MIME_TYPES.get(output_format, "application/octet-stream")
 
+    # Use secure filename encoding for Content-Disposition header
+    content_disposition = encode_filename_header(output_filename)
+
     return Response(
         content=converted_content,
         media_type=mime_type,
-        headers={"Content-Disposition": f'attachment; filename="{output_filename}"'},
+        headers={"Content-Disposition": content_disposition},
     )
 
 

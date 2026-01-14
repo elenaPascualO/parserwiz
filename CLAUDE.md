@@ -44,7 +44,7 @@ uv run ruff check backend/ --fix
 ```
 backend/
 ├── main.py                 # FastAPI app, main routes
-├── config.py               # Configuration (max sizes, etc.)
+├── config.py               # Configuration (max sizes, env detection, CORS)
 ├── converters/
 │   ├── base.py             # Base converter class
 │   ├── json_to_csv.py
@@ -55,7 +55,8 @@ backend/
 │   └── excel_to_csv.py
 └── utils/
     ├── file_detection.py   # Detect file type
-    └── validators.py       # Validate JSON, etc.
+    ├── validators.py       # Validate JSON, etc.
+    └── security.py         # Security headers, filename sanitization
 ```
 
 ### API Endpoints
@@ -89,10 +90,19 @@ Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 ## Documentation
 
 See `doc/` folder for detailed specifications:
+- `SPECIFICATIONS.md` - Comprehensive technical specifications (API, security, config)
 - `ROADMAP.md` - Project phases and feature roadmap
 - `PHASE0.md` - Current MVP specifications
 - `STACK.md` - Technical stack details and commands
-- 
+
+## Environment Variables (Production)
+
+```bash
+ENVIRONMENT=production          # Enables production mode
+ALLOWED_ORIGINS=https://domain.com  # CORS origins (comma-separated)
+MAX_FILE_SIZE_MB=10            # Max upload size in MB
+```
+
 ## General Guidelines
 
 1. **Plan first**: Think through the problem, read relevant files, and write a plan to `tasks/todo.md`

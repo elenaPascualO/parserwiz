@@ -286,6 +286,7 @@ tests/
 ├── test_csv_to_json.py
 ├── test_excel_to_json.py
 ├── test_api.py           # Endpoint tests
+├── test_security.py      # Security tests (headers, sanitization)
 └── sample_files/
     ├── simple.json
     ├── nested.json
@@ -328,14 +329,19 @@ docs: update API documentation
 
 ---
 
-## Security (Initial Considerations)
+## Security (Implemented P0)
 
-- [ ] Validate file type (not just extension)
-- [ ] Limit file size (10MB initial)
-- [ ] Don't store files after conversion
-- [ ] Sanitize filename in download
-- [ ] CORS configured correctly
-- [ ] Basic rate limiting (future)
+- [x] Validate file type (magic bytes + content analysis)
+- [x] Limit file size (10MB, configurable via MAX_FILE_SIZE_MB)
+- [x] Don't store files after conversion (in-memory only)
+- [x] Sanitize filename in download (header injection prevention)
+- [x] CORS configured correctly (env-based for production)
+- [x] Security headers (X-Frame-Options, CSP, X-Content-Type-Options)
+- [ ] Basic rate limiting (P1 - planned)
+- [ ] Request timeouts (P1 - planned)
+- [ ] ZIP bomb protection (P1 - planned)
+
+See `doc/SPECIFICATIONS.md` Section 6 for full security specifications.
 
 ---
 

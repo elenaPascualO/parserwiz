@@ -2,15 +2,26 @@
 
 ## Current Sprint
 
-_Phase 0 Improvements - Complete_
+_Security Implementation (P0) - Complete_
 
 ## Backlog
 
 - [ ] Deploy to Railway/Render/Fly.io
 - [ ] Configure production HTTPS
 - [ ] Add domain configuration
+- [ ] Implement rate limiting (P1 security)
+- [ ] Implement request timeouts (P1 security)
+- [ ] Implement ZIP bomb protection for XLSX (P1 security)
 
 ## Completed
+
+### Security Implementation (January 2026)
+
+- [x] **Filename sanitization**: Prevents header injection via Content-Disposition
+- [x] **Security headers middleware**: X-Frame-Options, X-Content-Type-Options, CSP, Referrer-Policy
+- [x] **Production CORS**: Environment-based CORS configuration (ALLOWED_ORIGINS env var)
+- [x] **Security tests**: 20 new tests for security features (74 total tests)
+- [x] **Specifications document**: Created comprehensive doc/SPECIFICATIONS.md
 
 ### Phase 0 Improvements (January 2026)
 
