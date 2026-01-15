@@ -56,6 +56,8 @@ Phase 0 (MVP) complete with basic file conversions. Pending deployment.
 - Anonymous usage
 - Loading indicators
 - User-friendly error messages with specific details
+- Privacy disclaimer in footer
+- Feedback form (Discord webhook integration)
 
 ---
 

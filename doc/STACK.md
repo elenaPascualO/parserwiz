@@ -65,18 +65,21 @@ dev-dependencies = [
 ```
 backend/
 ├── main.py                 # FastAPI app, main routes
-├── config.py               # Configuration (max sizes, etc.)
+├── config.py               # Configuration (max sizes, env detection, CORS)
 ├── converters/
 │   ├── __init__.py
 │   ├── base.py             # Base converter class
 │   ├── json_to_csv.py
 │   ├── json_to_excel.py
 │   ├── csv_to_json.py
-│   └── excel_to_json.py
+│   ├── csv_to_excel.py
+│   ├── excel_to_json.py
+│   └── excel_to_csv.py
 └── utils/
     ├── __init__.py
     ├── file_detection.py   # Detect file type
-    └── validators.py       # Validate JSON, etc.
+    ├── validators.py       # Validate JSON, etc.
+    └── security.py         # Security headers, filename sanitization
 ```
 
 ---
@@ -134,9 +137,9 @@ GET /api/health
 | Input | Available Outputs |
 |-------|-------------------|
 | .json | .csv, .xlsx |
-| .csv  | .json |
-| .xlsx | .json |
-| .xls  | .json |
+| .csv  | .json, .xlsx |
+| .xlsx | .json, .csv |
+| .xls  | .json, .csv |
 
 ### MIME Types
 

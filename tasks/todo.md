@@ -23,12 +23,17 @@ _Security Implementation (P0) - Complete_
 - [x] **Safety limit**: MAX_EXPANDED_ROWS=10000 prevents memory issues from large Cartesian products
 - [x] **Tests**: 4 new tests (78 total tests passing)
 
+### Frontend Features (January 2026)
+
+- [x] **Privacy disclaimer**: Added footer text informing users files are processed in memory
+- [x] **Feedback form**: Discord webhook integration for collecting user feedback
+
 ### Security Implementation (January 2026)
 
 - [x] **Filename sanitization**: Prevents header injection via Content-Disposition
 - [x] **Security headers middleware**: X-Frame-Options, X-Content-Type-Options, CSP, Referrer-Policy
 - [x] **Production CORS**: Environment-based CORS configuration (ALLOWED_ORIGINS env var)
-- [x] **Security tests**: 20 new tests for security features (74 total tests)
+- [x] **Security tests**: 20 new tests for security features
 - [x] **Specifications document**: Created comprehensive doc/SPECIFICATIONS.md
 
 ### Phase 0 Improvements (January 2026)

@@ -8,27 +8,40 @@ Web tool for conversion, cleaning, and manipulation of tabular data (JSON, CSV, 
 ## Phase 0 — MVP (Complete)
 **Goal:** Minimum functional product to validate demand.
 
+### Core Conversions
 - [x] JSON → CSV
 - [x] JSON → Excel (.xlsx)
 - [x] CSV → JSON
+- [x] CSV → Excel (.xlsx)
 - [x] Excel → JSON
-- [x] Data preview (first 10 rows)
-- [x] Basic and functional UI
+- [x] Excel → CSV
 
-**Status:** Backend and frontend complete. 31 tests passing. Pending: deployment.
+### Features
+- [x] Data preview with pagination
+- [x] Nested JSON array expansion (Cartesian product)
+- [x] Basic and functional UI
+- [x] Privacy disclaimer
+- [x] Feedback form (Discord webhook)
+
+### Security (P0)
+- [x] Filename sanitization
+- [x] Security headers middleware
+- [x] Production CORS configuration
+
+**Status:** Backend and frontend complete. 78 tests passing. Pending: deployment.
 
 ---
 
 ## Phase 1 — Consolidate Conversions 
 **Goal:** Cover more use cases, improve SEO.
 
-- [ ] Nested JSON support (flatten structures)
+- [x] Nested JSON support (flatten structures) - Completed in Phase 0
 - [ ] JSON Lines (.jsonl)
 - [ ] TSV (tab-separated)
 - [ ] Delimiter selector (comma, semicolon, tab, pipe)
-- [ ] .xls format (legacy Excel)
-- [ ] UX improvements: drag & drop, progress bar
-- [ ] User-friendly error handling
+- [x] .xls format (legacy Excel) - Completed in Phase 0
+- [x] UX improvements: drag & drop, progress bar - Completed in Phase 0
+- [x] User-friendly error handling - Completed in Phase 0
 
 ---
 
