@@ -170,9 +170,13 @@ Files are detected by:
 ### 3.6 Conversion Details
 
 #### JSON → CSV
-- Input: Array of objects or object with array values
-- Flattens first level of nesting
-- First row = column names (JSON keys)
+- Input: Array of objects or single object
+- **Nested array expansion**: Arrays of objects expand via Cartesian product (denormalization)
+  - Example: Object with 4 batters × 7 toppings = 28 rows
+  - Scalar fields repeat in each row
+  - Nested object keys use dot notation (e.g., `batters.batter.id`)
+- **Safety limit**: MAX_EXPANDED_ROWS (10000) prevents memory issues
+- First row = column names (JSON keys with dot notation for nested)
 - Delimiter: comma
 
 #### JSON → Excel
@@ -208,6 +212,7 @@ Files are detected by:
 |---------|-------|-------------|
 | MAX_FILE_SIZE | 10 MB | Maximum upload file size |
 | PREVIEW_ROWS | 500 | Default rows in preview |
+| MAX_EXPANDED_ROWS | 10000 | Max rows from nested JSON expansion |
 | ALLOWED_EXTENSIONS | .json, .csv, .xlsx, .xls | Accepted file types |
 
 ### 4.2 CORS Origins (Development)
@@ -457,12 +462,12 @@ Pre-deployment security verification:
 - **Unit tests:** Each converter has dedicated tests
 - **API tests:** Endpoint integration tests
 - **Security tests:** Filename sanitization, security headers
-- **Current status:** 74 tests passing
+- **Current status:** 78 tests passing
 
 ### 7.2 Test Files
 
 Sample files in `tests/sample_files/`:
-- simple.json, nested.json
+- simple.json, nested.json, nested2.json, nested3.json
 - simple.csv
 - simple.xlsx
 

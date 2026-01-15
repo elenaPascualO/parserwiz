@@ -15,6 +15,14 @@ _Security Implementation (P0) - Complete_
 
 ## Completed
 
+### Nested JSON Array Expansion (January 2026)
+
+- [x] **Nested array expansion**: JSON with nested arrays now expands via Cartesian product instead of losing data
+- [x] **Single object fix**: Single objects with multiple nested arrays preserve all fields (nested2.json: 4×7=28 rows)
+- [x] **Array of objects fix**: Arrays with nested arrays fully expand (nested3.json: 41 rows total)
+- [x] **Safety limit**: MAX_EXPANDED_ROWS=10000 prevents memory issues from large Cartesian products
+- [x] **Tests**: 4 new tests (78 total tests passing)
+
 ### Security Implementation (January 2026)
 
 - [x] **Filename sanitization**: Prevents header injection via Content-Disposition

@@ -208,7 +208,6 @@ Get file preview without converting.
 - User registration
 - Size limits
 - Multiple files at once
-- Complex nested JSON
 - Delimiter selection
 - Advanced analytics
 - Documented public API
@@ -244,3 +243,9 @@ Issues identified during usage that have been addressed:
 - [x] **Security tests**: 20 tests covering security features
 
 See `doc/SPECIFICATIONS.md` for full security specifications.
+
+### Nested JSON Support (January 2026)
+
+- [x] **Nested array expansion**: JSON with nested arrays (like batters + toppings) now expands via Cartesian product
+- [x] **Single object support**: Single objects with multiple nested arrays preserve all fields
+- [x] **Safety limit**: MAX_EXPANDED_ROWS=10000 prevents memory issues from large expansions
