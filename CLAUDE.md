@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DataToolkit is a web tool for conversion, cleaning, and manipulation of tabular data (JSON, CSV, Excel). Currently in Phase 0 (MVP) focusing on basic file conversions.
+DataToolkit is a web tool for conversion, cleaning, and manipulation of tabular data (JSON, CSV, Excel). Currently in **Phase 1** (Consolidate Conversions) - adding JSON transformations, new formats, and security hardening. Phase 0 (MVP) is complete with 78 tests passing.
 
 ## Tech Stack
 
@@ -65,12 +65,19 @@ backend/
 - `POST /api/analyze` - Analyze JSON complexity (returns is_complex, estimated_rows, arrays_found)
 - `GET /api/health` - Health check
 
-### Supported Conversions (Phase 0)
+### Supported Conversions
 | Input | Output |
 |-------|--------|
 | JSON  | CSV, XLSX |
 | CSV   | JSON, XLSX |
 | XLSX/XLS | JSON, CSV |
+
+### Phase 1 Features (In Progress)
+- JSON flatten/unflatten transformations
+- JSONL (.jsonl) support
+- TSV support
+- CSV delimiter selection
+- Security hardening (rate limiting, timeouts, ZIP bomb protection)
 
 ## Code Conventions
 
@@ -93,7 +100,8 @@ Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 See `doc/` folder for detailed specifications:
 - `SPECIFICATIONS.md` - Comprehensive technical specifications (API, security, config)
 - `ROADMAP.md` - Project phases and feature roadmap
-- `PHASE0.md` - Current MVP specifications
+- `PHASE1.md` - Current phase specifications (JSON transforms, formats, security)
+- `PHASE0.md` - MVP specifications (complete)
 - `STACK.md` - Technical stack details and commands
 
 ## Environment Variables (Production)

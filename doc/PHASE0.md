@@ -1,4 +1,6 @@
-# Phase 0 — MVP DataToolkit
+# Phase 0 — MVP DataToolkit (Complete)
+
+**Status:** Complete (January 2026) - 78 tests passing
 
 ## Goal
 Launch a functional MVP to validate real demand for a JSON ↔ CSV ↔ Excel conversion tool.
@@ -184,9 +186,9 @@ Get file preview without converting.
 
 ### DevOps
 - [x] Setup Git repository
-- [ ] Configure deploy on Railway/Render/Fly.io
-- [ ] Domain (custom domain)
-- [ ] HTTPS
+- [ ] Configure deploy on Railway/Render/Fly.io *(moved to Phase 1 backlog)*
+- [ ] Domain (custom domain) *(moved to Phase 1 backlog)*
+- [ ] HTTPS *(moved to Phase 1 backlog)*
 
 ---
 
@@ -197,9 +199,11 @@ Get file preview without converting.
 - [x] I can upload a CSV and download JSON
 - [x] I can upload an Excel and download JSON
 - [x] I see a preview of my data before converting
-- [ ] The web is deployed and publicly accessible
+- [ ] The web is deployed and publicly accessible *(moved to Phase 1 backlog)*
 - [x] Works on mobile (basic responsive)
 - [x] No obvious errors in console
+
+**Note:** All code and feature criteria complete. Deployment deferred to Phase 1.
 
 ---
 

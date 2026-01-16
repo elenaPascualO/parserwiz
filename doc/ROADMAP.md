@@ -19,6 +19,8 @@ Web tool for conversion, cleaning, and manipulation of tabular data (JSON, CSV, 
 ### Features
 - [x] Data preview with pagination
 - [x] Nested JSON array expansion (Cartesian product)
+- [x] Smart JSON handling (multi-table export, single-row export)
+- [x] Raw editor for malformed files
 - [x] Basic and functional UI
 - [x] Privacy disclaimer
 - [x] Feedback form (Discord webhook)
@@ -28,20 +30,34 @@ Web tool for conversion, cleaning, and manipulation of tabular data (JSON, CSV, 
 - [x] Security headers middleware
 - [x] Production CORS configuration
 
-**Status:** Backend and frontend complete. 78 tests passing. Pending: deployment.
+**Status:** Complete. 78 tests passing. Deployed pending.
 
 ---
 
-## Phase 1 — Consolidate Conversions 
-**Goal:** Cover more use cases, improve SEO.
+## Phase 1 — Consolidate Conversions (Current)
+**Goal:** Expand transformations, cover more use cases, security hardening.
 
-- [x] Nested JSON support (flatten structures) - Completed in Phase 0
-- [ ] JSON Lines (.jsonl)
-- [ ] TSV (tab-separated)
+See `doc/PHASE1.md` for detailed specifications.
+
+### JSON Transformations (New)
+- [ ] Flatten JSON (nested → dot notation)
+- [ ] Unflatten JSON (dot notation → nested)
+
+### New Formats
+- [ ] JSON Lines (.jsonl) read/write
+- [ ] TSV (tab-separated) read/write
 - [ ] Delimiter selector (comma, semicolon, tab, pipe)
-- [x] .xls format (legacy Excel) - Completed in Phase 0
-- [x] UX improvements: drag & drop, progress bar - Completed in Phase 0
-- [x] User-friendly error handling - Completed in Phase 0
+
+### Security Hardening (P1)
+- [ ] Rate limiting (slowapi)
+- [ ] Request timeouts
+- [ ] ZIP bomb protection for XLSX
+
+### Carried from Phase 0
+- [x] Nested JSON support (flatten structures)
+- [x] .xls format (legacy Excel)
+- [x] UX improvements: drag & drop, progress bar
+- [x] User-friendly error handling
 
 ---
 

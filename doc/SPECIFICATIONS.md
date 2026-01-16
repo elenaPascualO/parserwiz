@@ -3,14 +3,14 @@
 ## 1. Overview
 
 **Product Name:** DataToolkit
-**Version:** 0.1.0 (Phase 0 - MVP)
+**Version:** 0.2.0 (Phase 1 - Consolidate Conversions)
 **Purpose:** Web tool for conversion, cleaning, and manipulation of tabular data (JSON, CSV, Excel)
 
 ### 1.1 Vision
 Provide a simple, fast, and privacy-focused tool for converting between common tabular data formats without requiring user registration or storing user data.
 
 ### 1.2 Current Status
-Phase 0 (MVP) complete with basic file conversions. Pending deployment.
+Phase 1 in progress. Phase 0 (MVP) complete with 78 tests passing. See `doc/PHASE1.md` for current phase details.
 
 ---
 
@@ -576,3 +576,4 @@ See `doc/ROADMAP.md` for planned features:
 | 0.1.1 | 2026-01 | Added raw editor for malformed JSON/CSV files |
 | 0.1.2 | 2026-01 | Added smart JSON handling with export modes and /api/analyze endpoint |
 | 0.1.3 | 2026-01 | Simplified complex JSON UX: info screen + tabbed preview instead of selection dialog |
+| 0.2.0 | 2026-01 | Phase 1 started: JSON transformations, new formats, security hardening |
