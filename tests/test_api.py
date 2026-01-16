@@ -333,3 +333,49 @@ async def test_all_xlsx_conversions(client: AsyncClient, simple_xlsx: bytes):
         response = await client.post("/api/convert", files=files, data=data)
 
         assert response.status_code == 200, f"XLSX to {output_format} failed"
+
+
+# ============== PREVIEW ALL TABLES ENDPOINT ==============
+
+
+@pytest.mark.asyncio
+async def test_preview_all_tables_json(client: AsyncClient, nested2_json: bytes):
+    """Test preview-all-tables endpoint with complex JSON."""
+    files = {"file": ("nested2.json", nested2_json, "application/json")}
+    data = {"rows_per_table": "5"}
+    response = await client.post("/api/preview-all-tables", files=files, data=data)
+
+    assert response.status_code == 200
+    result = response.json()
+
+    # Should have tables dict
+    assert "tables" in result
+    assert "detected_type" in result
+    assert result["detected_type"] == "json"
+
+    # Check expected tables exist
+    tables = result["tables"]
+    assert "main" in tables
+    assert "topping" in tables
+
+    # Check main table structure
+    main = tables["main"]
+    assert "columns" in main
+    assert "rows" in main
+    assert "total_rows" in main
+    assert main["total_rows"] == 1
+
+    # Check topping table
+    topping = tables["topping"]
+    assert topping["total_rows"] == 7
+    assert len(topping["rows"]) <= 5  # Limited by rows_per_table
+
+
+@pytest.mark.asyncio
+async def test_preview_all_tables_non_json_fails(client: AsyncClient, simple_csv: bytes):
+    """Test preview-all-tables endpoint rejects non-JSON files."""
+    files = {"file": ("test.csv", simple_csv, "text/csv")}
+    response = await client.post("/api/preview-all-tables", files=files)
+
+    assert response.status_code == 400
+    assert "JSON" in response.json()["detail"]

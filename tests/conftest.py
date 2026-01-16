@@ -34,6 +34,18 @@ def simple_csv(sample_files_dir: Path) -> bytes:
 
 
 @pytest.fixture
+def nested2_json(sample_files_dir: Path) -> bytes:
+    """Return nested2 JSON test data (single object with multiple arrays)."""
+    return (sample_files_dir / "nested2.json").read_bytes()
+
+
+@pytest.fixture
+def nested3_json(sample_files_dir: Path) -> bytes:
+    """Return nested3 JSON test data (array of objects with nested arrays)."""
+    return (sample_files_dir / "nested3.json").read_bytes()
+
+
+@pytest.fixture
 def simple_xlsx(sample_files_dir: Path) -> bytes:
     """Return simple XLSX test data."""
     xlsx_path = sample_files_dir / "simple.xlsx"

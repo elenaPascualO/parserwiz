@@ -34,6 +34,8 @@ PREVIEW_ROWS: int = 500
 # JSON expansion settings
 # Maximum rows that can be generated when expanding nested arrays (Cartesian product)
 MAX_EXPANDED_ROWS: int = 10000
+# Threshold for considering JSON "complex" (prompts user for export mode choice)
+COMPLEX_JSON_THRESHOLD: int = 100
 
 
 def get_cors_origins() -> list[str]:

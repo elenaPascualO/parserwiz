@@ -1,5 +1,7 @@
 """FastAPI application for DataToolkit."""
 
+import io
+import zipfile
 from pathlib import Path
 
 import httpx
@@ -24,6 +26,7 @@ from backend.converters import (
     JsonToCsvConverter,
     JsonToExcelConverter,
 )
+from backend.converters.json_to_csv import ExportMode
 from backend.utils.file_detection import detect_file_type
 from backend.utils.security import SecurityHeadersMiddleware, encode_filename_header
 from backend.utils.validators import validate_file
@@ -77,11 +80,58 @@ async def health_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@app.post("/api/analyze")
+async def analyze_file(file: UploadFile = File(...)) -> dict:
+    """Analyze JSON file structure to determine complexity.
+
+    Args:
+        file: The uploaded file.
+
+    Returns:
+        Analysis results with is_complex, estimated_rows, arrays_found,
+        and expansion_formula.
+
+    Raises:
+        HTTPException: If file is invalid or not JSON.
+    """
+    content = await file.read()
+    filename = file.filename or "unknown"
+
+    # Validate file
+    is_valid, error = validate_file(content, filename)
+    if not is_valid:
+        raise HTTPException(status_code=400, detail=error)
+
+    # Detect file type
+    file_type = detect_file_type(content, filename)
+    if not file_type:
+        raise HTTPException(status_code=400, detail="Could not detect file type")
+
+    # Only JSON files need complexity analysis
+    if file_type != "json":
+        return {
+            "is_complex": False,
+            "estimated_rows": None,
+            "arrays_found": [],
+            "expansion_formula": None,
+            "message": "Only JSON files require complexity analysis",
+        }
+
+    # Analyze JSON structure
+    converter = JsonToCsvConverter()
+    try:
+        analysis = converter.analyze_json_structure(content)
+        return analysis
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+
+
 @app.post("/api/preview")
 async def preview_file(
     file: UploadFile = File(...),
     page: int = Form(default=1),
     page_size: int = Form(default=PREVIEW_ROWS),
+    export_mode: str = Form(default="normal"),
 ) -> dict:
     """Preview file data with pagination support.
 
@@ -89,6 +139,7 @@ async def preview_file(
         file: The uploaded file.
         page: Page number (1-indexed). Defaults to 1.
         page_size: Number of rows per page. Defaults to PREVIEW_ROWS (10).
+        export_mode: Export mode for JSON files (normal, multi_table, single_row).
 
     Returns:
         Preview data with columns, rows, total_rows, detected_type,
@@ -126,9 +177,68 @@ async def preview_file(
         )
 
     try:
-        preview_data = converter.preview(content, page=page, page_size=page_size)
+        # For JSON files, use export_mode
+        if file_type == "json":
+            mode = ExportMode(export_mode)
+            preview_data = converter.preview(
+                content, page=page, page_size=page_size, export_mode=mode
+            )
+        else:
+            preview_data = converter.preview(content, page=page, page_size=page_size)
+
         preview_data["detected_type"] = file_type
         return preview_data
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+
+
+@app.post("/api/preview-all-tables")
+async def preview_all_tables(
+    file: UploadFile = File(...),
+    rows_per_table: int = Form(default=5),
+) -> dict:
+    """Preview all tables from complex JSON in multi-table mode.
+
+    Returns a preview of all extracted tables, each with limited rows,
+    allowing users to see the full multi-table structure before downloading.
+
+    Args:
+        file: The uploaded JSON file.
+        rows_per_table: Maximum rows per table. Defaults to 5.
+
+    Returns:
+        Dictionary with tables info, each containing columns, rows, total_rows.
+
+    Raises:
+        HTTPException: If file is invalid or not JSON.
+    """
+    content = await file.read()
+    filename = file.filename or "unknown"
+
+    # Validate file
+    is_valid, error = validate_file(content, filename)
+    if not is_valid:
+        raise HTTPException(status_code=400, detail=error)
+
+    # Detect file type
+    file_type = detect_file_type(content, filename)
+    if file_type != "json":
+        raise HTTPException(
+            status_code=400,
+            detail="Only JSON files are supported for multi-table preview",
+        )
+
+    # Validate rows_per_table
+    if rows_per_table < 1:
+        rows_per_table = 5
+    if rows_per_table > 100:
+        rows_per_table = 100
+
+    converter = JsonToCsvConverter()
+    try:
+        result = converter.preview_all_tables(content, rows_per_table)
+        result["detected_type"] = "json"
+        return result
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
@@ -137,12 +247,14 @@ async def preview_file(
 async def convert_file(
     file: UploadFile = File(...),
     output_format: str = Form(...),
+    export_mode: str = Form(default="normal"),
 ) -> Response:
     """Convert file to specified format.
 
     Args:
         file: The uploaded file.
         output_format: Target format (csv, xlsx, json).
+        export_mode: Export mode for JSON files (normal, multi_table, single_row).
 
     Returns:
         The converted file.
@@ -183,13 +295,36 @@ async def convert_file(
             detail=f"Converter not available for {file_type} to {output_format}",
         )
 
+    # Generate base output filename
+    base_name = Path(filename).stem
+
     try:
-        converted_content = converter.convert(content)
+        # Handle JSON to CSV/Excel with export_mode
+        if file_type == "json":
+            mode = ExportMode(export_mode)
+
+            # Multi-table CSV -> ZIP file with multiple CSVs
+            if mode == ExportMode.MULTI_TABLE and output_format == "csv":
+                tables = converter.convert_multi_table(content)
+                zip_content = _create_csv_zip(tables, base_name)
+                output_filename = f"{base_name}.zip"
+                return Response(
+                    content=zip_content,
+                    media_type="application/zip",
+                    headers={
+                        "Content-Disposition": encode_filename_header(output_filename)
+                    },
+                )
+
+            # Other modes (including multi-table Excel)
+            converted_content = converter.convert(content, export_mode=mode)
+        else:
+            converted_content = converter.convert(content)
+
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
-    # Generate output filename (sanitized for security)
-    base_name = Path(filename).stem
+    # Generate output filename
     output_filename = f"{base_name}.{output_format}"
 
     # Get MIME type
@@ -203,6 +338,31 @@ async def convert_file(
         media_type=mime_type,
         headers={"Content-Disposition": content_disposition},
     )
+
+
+def _create_csv_zip(tables: dict, base_name: str) -> bytes:
+    """Create a ZIP file containing multiple CSV files.
+
+    Args:
+        tables: Dictionary mapping table names to DataFrames.
+        base_name: Base name for CSV files.
+
+    Returns:
+        ZIP file content as bytes.
+    """
+    zip_buffer = io.BytesIO()
+
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+        for table_name, df in tables.items():
+            csv_buffer = io.StringIO()
+            df.to_csv(csv_buffer, index=False)
+            csv_content = csv_buffer.getvalue().encode("utf-8")
+
+            # Use table name as filename
+            csv_filename = f"{base_name}_{table_name}.csv"
+            zip_file.writestr(csv_filename, csv_content)
+
+    return zip_buffer.getvalue()
 
 
 class FeedbackRequest(BaseModel):

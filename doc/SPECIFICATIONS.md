@@ -59,6 +59,27 @@ Phase 0 (MVP) complete with basic file conversions. Pending deployment.
 - Privacy disclaimer in footer
 - Feedback form (Discord webhook integration)
 
+#### Complex JSON Handling
+- Automatic complexity detection (threshold: >100 estimated rows from multiple arrays)
+- Info screen explains detected complexity with "Next" button
+- Tip explaining `_record_id` column (auto-added to link related records across tables)
+- Tabbed preview to compare export options:
+  - **Multi-file**: Accordion view showing each table (all collapsed by default)
+  - **Single-file**: Compact view with arrays as JSON text columns
+- Download uses the currently selected tab's export mode
+
+#### Preview UX Enhancements
+- Hover hint message above tables ("💡 Hover over cells to view full content")
+- "Start Over" button (renamed from "Upload another file") for clearer reset action
+
+#### Raw Editor for Malformed Files
+- Shows raw text editor when JSON/CSV files fail to parse
+- Displays parse error message inline (above editor)
+- Line numbers for easy error location
+- Users can edit content and retry parsing
+- On success, proceeds to normal table preview
+- Not available for Excel (binary format)
+
 ---
 
 ## 3. Technical Specifications
@@ -107,6 +128,32 @@ GET /api/health
 Response: { "status": "ok" }
 ```
 
+#### Analyze File (JSON Complexity)
+```
+POST /api/analyze
+Content-Type: multipart/form-data
+
+Parameters:
+- file: File (required) - The file to analyze
+
+Response:
+{
+  "is_complex": true,
+  "estimated_rows": 272160,
+  "arrays_found": [
+    {"path": "artists", "count": 3},
+    {"path": "tracks", "count": 6},
+    {"path": "videos", "count": 4}
+  ],
+  "expansion_formula": "3 × 6 × 4 = 72"
+}
+
+Notes:
+- Only meaningful for JSON files
+- Non-JSON files return is_complex: false
+- JSON is "complex" if it has 2+ arrays AND estimated_rows > 100
+```
+
 #### Preview File
 ```
 POST /api/preview
@@ -116,6 +163,10 @@ Parameters:
 - file: File (required) - The file to preview
 - page: int (optional, default: 1) - Page number (1-indexed)
 - page_size: int (optional, default: 500, max: 100) - Rows per page
+- export_mode: string (optional, default: "normal") - JSON export mode
+  - "normal": Standard Cartesian product expansion
+  - "multi_table": Multiple tables, one per array
+  - "single_row": Arrays kept as JSON strings
 
 Response:
 {
@@ -125,7 +176,9 @@ Response:
   "detected_type": "json",
   "current_page": 1,
   "total_pages": 15,
-  "page_size": 100
+  "page_size": 100,
+  "table_info": {"main": 1, "artists": 3, "tracks": 6},  // multi_table only
+  "preview_table": "main"  // multi_table only
 }
 
 Errors:
@@ -140,10 +193,15 @@ Content-Type: multipart/form-data
 Parameters:
 - file: File (required) - The file to convert
 - output_format: string (required) - Target format (csv, xlsx, json)
+- export_mode: string (optional, default: "normal") - JSON export mode
+  - "normal": Standard Cartesian product expansion
+  - "multi_table": Multiple tables (Excel: sheets, CSV: ZIP)
+  - "single_row": Arrays kept as JSON strings
 
 Response:
 - Binary file download with appropriate Content-Type
 - Content-Disposition header with filename
+- For multi_table + CSV: Returns ZIP file (application/zip)
 
 Errors:
 - 400: Invalid file, unsupported conversion, or conversion failure
@@ -215,6 +273,7 @@ Files are detected by:
 | MAX_FILE_SIZE | 10 MB | Maximum upload file size |
 | PREVIEW_ROWS | 500 | Default rows in preview |
 | MAX_EXPANDED_ROWS | 10000 | Max rows from nested JSON expansion |
+| COMPLEX_JSON_THRESHOLD | 100 | Threshold for complex JSON detection |
 | ALLOWED_EXTENSIONS | .json, .csv, .xlsx, .xls | Accepted file types |
 
 ### 4.2 CORS Origins (Development)
@@ -514,3 +573,6 @@ See `doc/ROADMAP.md` for planned features:
 | Version | Date | Changes |
 |---------|------|---------|
 | 0.1.0 | 2025-01 | Initial specifications document |
+| 0.1.1 | 2026-01 | Added raw editor for malformed JSON/CSV files |
+| 0.1.2 | 2026-01 | Added smart JSON handling with export modes and /api/analyze endpoint |
+| 0.1.3 | 2026-01 | Simplified complex JSON UX: info screen + tabbed preview instead of selection dialog |

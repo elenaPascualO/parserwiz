@@ -60,8 +60,9 @@ backend/
 ```
 
 ### API Endpoints
-- `POST /api/convert` - Convert file (multipart file + output_format string)
-- `POST /api/preview` - Preview file data with pagination (page, page_size params)
+- `POST /api/convert` - Convert file (multipart file + output_format + export_mode)
+- `POST /api/preview` - Preview file data with pagination (page, page_size, export_mode)
+- `POST /api/analyze` - Analyze JSON complexity (returns is_complex, estimated_rows, arrays_found)
 - `GET /api/health` - Health check
 
 ### Supported Conversions (Phase 0)

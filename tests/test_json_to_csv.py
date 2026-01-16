@@ -2,10 +2,11 @@
 
 import csv
 import io
+import json
 
 import pytest
 
-from backend.converters.json_to_csv import JsonToCsvConverter
+from backend.converters.json_to_csv import ExportMode, JsonToCsvConverter
 
 
 class TestJsonToCsvConverter:
@@ -197,3 +198,205 @@ class TestJsonToCsvConverter:
 
         assert result["current_page"] == 3
         assert len(result["rows"]) == 8  # 28 - 20 = 8 remaining rows
+
+
+class TestMultiTableMode:
+    """Tests for MULTI_TABLE export mode."""
+
+    def setup_method(self):
+        """Set up test fixtures."""
+        self.converter = JsonToCsvConverter()
+
+    def test_convert_multi_table_nested2_structure(self, nested2_json: bytes):
+        """Test MULTI_TABLE mode extracts correct tables from nested2.json.
+
+        Expected tables (top-level arrays only):
+        - main: 1 row with scalar fields + nested objects flattened
+        - topping: 7 rows (_record_id, id, type)
+
+        Note: batters.batter is a nested array (inside batters object),
+        so it becomes a JSON string in the main table, not a separate table.
+        """
+        tables = self.converter.convert_multi_table(nested2_json)
+
+        # Verify tables exist (only top-level arrays become separate tables)
+        assert "main" in tables
+        assert "topping" in tables
+        assert len(tables) == 2
+
+        # Verify main table
+        main_df = tables["main"]
+        assert len(main_df) == 1
+        assert "_record_id" in main_df.columns
+        assert "id" in main_df.columns
+        assert "name" in main_df.columns
+        assert "ppu" in main_df.columns
+        assert main_df.iloc[0]["id"] == "0001"
+        assert main_df.iloc[0]["name"] == "Cake"
+
+        # Verify nested array (batters.batter) is a JSON string in main
+        assert "batters.batter" in main_df.columns
+        batters_str = main_df.iloc[0]["batters.batter"]
+        batters = json.loads(batters_str)
+        assert len(batters) == 4  # 4 batter items as JSON
+
+        # Verify topping table (top-level array)
+        topping_df = tables["topping"]
+        assert len(topping_df) == 7
+        assert "_record_id" in topping_df.columns
+        assert all(topping_df["_record_id"] == 1)
+
+    def test_convert_multi_table_nested3_structure(self, nested3_json: bytes):
+        """Test MULTI_TABLE mode with array of objects (nested3.json).
+
+        Expected (top-level arrays only):
+        - main: 3 rows (one per product with _record_id 1, 2, 3)
+        - topping: 16 rows total (7+5+4 across products)
+
+        Note: batters.batter is nested, so becomes JSON string in main table.
+        """
+        tables = self.converter.convert_multi_table(nested3_json)
+
+        # Verify tables (only top-level array becomes separate table)
+        assert "main" in tables
+        assert "topping" in tables
+        assert len(tables) == 2
+
+        # Verify main table
+        main_df = tables["main"]
+        assert len(main_df) == 3
+        assert list(main_df["_record_id"]) == [1, 2, 3]
+        assert set(main_df["id"]) == {"0001", "0002", "0003"}
+
+        # Verify nested array (batters.batter) is JSON string in main
+        assert "batters.batter" in main_df.columns
+        # First product has 4 batters
+        batters1 = json.loads(main_df.iloc[0]["batters.batter"])
+        assert len(batters1) == 4
+        # Second product has 1 batter
+        batters2 = json.loads(main_df.iloc[1]["batters.batter"])
+        assert len(batters2) == 1
+        # Third product has 2 batters
+        batters3 = json.loads(main_df.iloc[2]["batters.batter"])
+        assert len(batters3) == 2
+
+        # Verify topping table (top-level array)
+        topping_df = tables["topping"]
+        assert len(topping_df) == 16  # 7 + 5 + 4
+
+    def test_convert_multi_table_csv_raises(self, nested2_json: bytes):
+        """Test that CSV convert() with MULTI_TABLE mode raises ValueError."""
+        with pytest.raises(ValueError, match="MULTI_TABLE.*ZIP"):
+            self.converter.convert(nested2_json, export_mode=ExportMode.MULTI_TABLE)
+
+    def test_preview_multi_table_returns_table_info(self, nested2_json: bytes):
+        """Test that preview with MULTI_TABLE returns table_info dict with row counts."""
+        result = self.converter.preview(
+            nested2_json, page=1, page_size=10, export_mode=ExportMode.MULTI_TABLE
+        )
+
+        # Should have table_info
+        assert "table_info" in result
+        assert "preview_table" in result
+        assert result["preview_table"] == "main"
+
+        # Check table counts (only top-level arrays become separate tables)
+        table_info = result["table_info"]
+        assert table_info["main"] == 1
+        assert table_info["topping"] == 7
+        assert len(table_info) == 2
+
+
+class TestSingleRowMode:
+    """Tests for SINGLE_ROW export mode."""
+
+    def setup_method(self):
+        """Set up test fixtures."""
+        self.converter = JsonToCsvConverter()
+
+    def test_convert_single_row_nested2_preserves_arrays(self, nested2_json: bytes):
+        """Test SINGLE_ROW mode keeps arrays as JSON strings.
+
+        Expected: 1 row with columns including:
+        - id, type, name, ppu (scalar values)
+        - batters.batter (JSON string of array)
+        - topping (JSON string of array)
+        """
+        result = self.converter.convert(nested2_json, export_mode=ExportMode.SINGLE_ROW)
+
+        reader = csv.DictReader(io.StringIO(result.decode("utf-8")))
+        rows = list(reader)
+
+        # Should be exactly 1 row (no expansion)
+        assert len(rows) == 1
+
+        row = rows[0]
+
+        # Verify scalar fields
+        assert row["id"] == "0001"
+        assert row["name"] == "Cake"
+        assert row["ppu"] == "0.55"
+
+        # Verify arrays are JSON strings
+        assert "batters.batter" in reader.fieldnames
+        assert "topping" in reader.fieldnames
+
+        # Parse the JSON strings to verify content
+        batters = json.loads(row["batters.batter"])
+        assert len(batters) == 4
+        assert batters[0]["type"] == "Regular"
+
+        toppings = json.loads(row["topping"])
+        assert len(toppings) == 7
+        assert toppings[0]["type"] == "None"
+
+    def test_convert_single_row_nested3_arrays_as_strings(self, nested3_json: bytes):
+        """Test SINGLE_ROW mode with array of objects.
+
+        Expected: 3 rows, each with arrays serialized as JSON strings.
+        """
+        result = self.converter.convert(nested3_json, export_mode=ExportMode.SINGLE_ROW)
+
+        reader = csv.DictReader(io.StringIO(result.decode("utf-8")))
+        rows = list(reader)
+
+        # Should be 3 rows (one per root object, no expansion)
+        assert len(rows) == 3
+
+        # Check each product has correct data
+        product_ids = [row["id"] for row in rows]
+        assert product_ids == ["0001", "0002", "0003"]
+
+        # Verify first product arrays are JSON strings
+        first_row = rows[0]
+        batters = json.loads(first_row["batters.batter"])
+        assert len(batters) == 4
+
+        # Verify second product has fewer batters
+        second_row = rows[1]
+        batters = json.loads(second_row["batters.batter"])
+        assert len(batters) == 1
+
+    def test_preview_single_row_mode(self, nested2_json: bytes):
+        """Test preview in SINGLE_ROW mode shows correct structure."""
+        result = self.converter.preview(
+            nested2_json, page=1, page_size=10, export_mode=ExportMode.SINGLE_ROW
+        )
+
+        # Should have 1 row (no expansion)
+        assert result["total_rows"] == 1
+        assert len(result["rows"]) == 1
+
+        # Should have array columns as strings
+        columns = result["columns"]
+        assert "batters.batter" in columns
+        assert "topping" in columns
+
+        # The row values should be JSON strings for arrays
+        row = result["rows"][0]
+        # Find the index of batters.batter column
+        batter_idx = columns.index("batters.batter")
+        batter_value = row[batter_idx]
+        # Should be parseable as JSON
+        parsed = json.loads(batter_value)
+        assert len(parsed) == 4
