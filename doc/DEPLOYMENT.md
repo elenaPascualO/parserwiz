@@ -79,7 +79,7 @@ Go to your service → **Variables** tab and add:
 | Variable | Value | Required |
 |----------|-------|----------|
 | `ENVIRONMENT` | `production` | Yes |
-| `ALLOWED_ORIGINS` | `https://your-domain.com` | Yes |
+| `ALLOWED_ORIGINS` | `https://www.datatoolkit.pro` | Yes |
 | `DISCORD_WEBHOOK_URL` | Your Discord webhook URL | No |
 | `MAX_FILE_SIZE_MB` | `10` (default) | No |
 | `RAILPACK_PYTHON_VERSION` | `3.12` | Only if build fails |

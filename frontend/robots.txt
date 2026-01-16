@@ -1,0 +1,9 @@
+# robots.txt for DataToolkit
+# https://www.robotstxt.org/
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location (update with your actual domain)
+Sitemap: https://www.datatoolkit.pro/sitemap.xml
