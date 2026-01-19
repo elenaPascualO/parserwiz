@@ -136,6 +136,26 @@ main {
     background-color: var(--primary-hover);
 }
 
+/* Selected file info (shown after file selection) */
+.selected-file-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-light);
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    color: var(--primary-hover);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.selected-file-info::before {
+    content: '✓';
+    font-weight: 700;
+}
+
 /* Preview section */
 .preview-section {
     background: var(--card-bg);
@@ -630,17 +650,62 @@ tbody tr:hover {
 /* Error message */
 .error-message {
     position: fixed;
-    bottom: 2rem;
+    top: 1rem;
     left: 50%;
     transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     background-color: var(--error-color);
     color: white;
     padding: 1rem 1.5rem;
     border-radius: 8px;
     box-shadow: var(--shadow);
     max-width: 90%;
-    text-align: center;
+    text-align: left;
     z-index: 1001;
+}
+
+.error-message.hidden {
+    display: none !important;
+}
+
+.error-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+    flex-shrink: 0;
+}
+
+.error-close:hover {
+    opacity: 1;
+}
+
+/* Focus-visible styles for accessibility */
+button:focus-visible,
+.file-button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+details summary:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.mode-btn:focus-visible {
+    outline-offset: -2px;
+}
+
+.drop-zone:focus-visible {
+    border-color: var(--primary-color);
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 /* Utility classes */

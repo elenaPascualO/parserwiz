@@ -16,6 +16,9 @@ const convertButtons = document.getElementById('convert-buttons')
 const resetButton = document.getElementById('reset-button')
 const loadingOverlay = document.getElementById('loading')
 const errorMessage = document.getElementById('error-message')
+const errorText = document.getElementById('error-text')
+const errorCloseBtn = document.getElementById('error-close')
+const selectedFileInfo = document.getElementById('selected-file-info')
 const prevPageBtn = document.getElementById('prev-page')
 const nextPageBtn = document.getElementById('next-page')
 const pageInfo = document.getElementById('page-info')
@@ -109,6 +112,9 @@ function init() {
     // Preview mode toggle (for complex JSON)
     btnMultiFile.addEventListener('click', () => setPreviewMode('multi'))
     btnSingleFile.addEventListener('click', () => setPreviewMode('single'))
+
+    // Error close button
+    errorCloseBtn.addEventListener('click', hideError)
 }
 
 // Handle drag over
@@ -145,10 +151,28 @@ function handleFileSelect(e) {
     }
 }
 
+// Show selected file feedback immediately
+function showSelectedFile(file) {
+    selectedFileInfo.textContent = `${file.name} selected`
+    selectedFileInfo.classList.remove('hidden')
+}
+
+// Hide selected file feedback
+function hideSelectedFile() {
+    selectedFileInfo.classList.add('hidden')
+    selectedFileInfo.textContent = ''
+}
+
 // Process uploaded file
 async function processFile(file, page = 1) {
     currentFile = file
     currentPage = page
+
+    // Show file selected feedback immediately (only on first page)
+    if (page === 1) {
+        showSelectedFile(file)
+    }
+
     showLoading()
     hideError()
 
@@ -184,11 +208,18 @@ async function processFile(file, page = 1) {
         const data = await response.json()
         showPreview(file, data)
     } catch (error) {
+        // Check if this is a non-recoverable error (file too large, etc.)
+        const isNonRecoverableError = error.message.toLowerCase().includes('too large')
+
         // Check if this is a parseable file type (JSON or CSV) on first page
         const extension = file.name.split('.').pop().toLowerCase()
         const isEditableType = ['json', 'csv'].includes(extension)
 
-        if (page === 1 && isEditableType) {
+        if (isNonRecoverableError) {
+            // For non-recoverable errors, just show toast and reset
+            resetUI()
+            showError(error.message)
+        } else if (page === 1 && isEditableType) {
             // Show raw editor for JSON/CSV parse errors
             await showRawEditor(file, error.message)
         } else if (page === 1) {
@@ -234,6 +265,7 @@ function showPreview(file, data) {
     data.columns.forEach(col => {
         const th = document.createElement('th')
         th.textContent = col
+        th.setAttribute('scope', 'col')
         headerRow.appendChild(th)
     })
     tableHead.appendChild(headerRow)
@@ -380,6 +412,9 @@ function resetUI() {
     currentPreviewMode = 'multi'
     multiTablePreviewData = null
     singleFilePreviewData = null
+
+    // Hide selected file feedback
+    hideSelectedFile()
 
     // Hide all sections and show upload
     uploadSection.classList.remove('hidden')
@@ -655,7 +690,7 @@ function renderMultiTableAccordion(tables) {
 function renderAccordionTable(columns, rows) {
     let html = '<table><thead><tr>'
     columns.forEach(col => {
-        html += `<th>${col}</th>`
+        html += `<th scope="col">${col}</th>`
     })
     html += '</tr></thead><tbody>'
 
@@ -680,9 +715,11 @@ function renderAccordionTable(columns, rows) {
 function setPreviewMode(mode) {
     currentPreviewMode = mode
 
-    // Update button states
+    // Update button states and aria-pressed
     btnMultiFile.classList.toggle('active', mode === 'multi')
     btnSingleFile.classList.toggle('active', mode === 'single')
+    btnMultiFile.setAttribute('aria-pressed', mode === 'multi')
+    btnSingleFile.setAttribute('aria-pressed', mode === 'single')
 
     // Update selectedExportMode for download
     selectedExportMode = mode === 'multi' ? 'multi_table' : 'single_row'
@@ -722,6 +759,7 @@ function renderSingleFilePreview(data) {
     data.columns.forEach(col => {
         const th = document.createElement('th')
         th.textContent = col
+        th.setAttribute('scope', 'col')
         headerRow.appendChild(th)
     })
     tableHead.appendChild(headerRow)
@@ -755,19 +793,31 @@ function hideLoading() {
     loadingOverlay.classList.add('hidden')
 }
 
+// Error timeout reference for cleanup
+let errorTimeout = null
+
 // Show error message
 function showError(message) {
-    errorMessage.textContent = message
+    // Clear any existing timeout
+    if (errorTimeout) {
+        clearTimeout(errorTimeout)
+    }
+
+    errorText.textContent = message
     errorMessage.classList.remove('hidden')
 
-    // Auto-hide after 5 seconds
-    setTimeout(() => {
+    // Auto-hide after 8 seconds
+    errorTimeout = setTimeout(() => {
         hideError()
-    }, 5000)
+    }, 8000)
 }
 
 // Hide error message
 function hideError() {
+    if (errorTimeout) {
+        clearTimeout(errorTimeout)
+        errorTimeout = null
+    }
     errorMessage.classList.add('hidden')
 }
 
