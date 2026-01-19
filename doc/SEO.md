@@ -150,3 +150,142 @@ rsvg-convert -w 180 -h 180 favicon.svg -o apple-touch-icon.png
 cd frontend
 rsvg-convert -w 1200 -h 630 og-image.svg -o og-image.png
 ```
+
+## Growth Strategy
+
+### Target Audience
+
+ParseWiz targets **end users who need instant, browser-based file conversion** - not developers looking for libraries. This includes:
+- Data analysts working with exports
+- Business users handling data from APIs
+- Marketers dealing with data feeds
+- Anyone who needs quick format conversion without coding
+
+### Key Differentiators
+
+These features set ParseWiz apart from competitors like ConvertCSV.com and JSON-CSV.com:
+
+| Feature | What It Does | Why It Matters |
+|---------|--------------|----------------|
+| **Online JSON Error Fixing** | When JSON has syntax errors, shows an inline editor with line numbers and error message. Users can fix directly and retry. | Competitors just show "Parse Error" and fail. Users must go elsewhere to fix their file. |
+| **Table-View Preview** | See data in a real table format before downloading, with pagination and hover-to-expand cells. | Other tools convert blindly - you only see the result after download. |
+| **Smart Complex JSON Handling** | Detects nested JSON and offers two export modes: "Multiple Tables" (relational with `_record_id` linking) or "Single Compact Row" (flat). | Other tools either fail on complex JSON or force one flattening approach. |
+
+### Messaging Guidelines
+
+**Tagline options:**
+- "The only JSON converter that helps you fix errors and handle complex nested data"
+- "JSON too messy? Fix it and convert it - all in one place"
+- "Convert complex JSON to CSV/Excel - with error fixing built-in"
+
+**Key talking points for posts:**
+
+1. **On error fixing:**
+   > "Ever uploaded a JSON file and just got 'Parse Error'? ParseWiz shows you exactly where the error is and lets you fix it right there - no need to open another tool."
+
+2. **On table preview:**
+   > "Preview your data in a real table before downloading. No more converting blindly and hoping for the best."
+
+3. **On complex JSON:**
+   > "Most converters choke on nested JSON or flatten it badly. ParseWiz detects complex structures and gives you options: split into related tables (with automatic linking) or keep it compact. Preview both before downloading."
+
+### Indexing Status (as of January 2026)
+
+| Platform | Status |
+|----------|--------|
+| Google Search Console | Indexed, sitemap submitted |
+| Bing Webmaster Tools | Sitemap submitted, indexing requested |
+
+### Building Backlinks
+
+#### Tier 1: Tool Directories (High Priority)
+
+| Directory | URL | Notes |
+|-----------|-----|-------|
+| AlternativeTo | https://alternativeto.net | List as alternative to ConvertCSV, JSON-CSV |
+| Product Hunt | https://producthunt.com | Great for launch visibility |
+| ToolPilot.ai | https://toolpilot.ai | AI/tool directory |
+| SaaSHub | https://saashub.com | Software alternatives site |
+| Slant | https://slant.co | "What's the best X" comparisons |
+| There's An AI For That | https://theresanaiforthat.com | Tool discovery platform |
+
+#### Tier 2: Communities (Targeted Traffic)
+
+| Community | Where to Post |
+|-----------|---------------|
+| Reddit | r/excel, r/analytics, r/datasets, r/data |
+| LinkedIn | Data analyst groups, business intelligence groups |
+| Twitter/X | #DataAnalytics, #Excel hashtags |
+| Facebook Groups | Excel users, data analysis groups |
+
+**Suggested post format:**
+> "I built a free tool to convert JSON/CSV/Excel files instantly in the browser. No signup, no file uploads to servers. Useful when you get data exports in the wrong format."
+
+#### Tier 3: Q&A Sites
+
+- **Quora** - Answer questions about "how to convert JSON to CSV"
+- **Stack Overflow** - Only where genuinely helpful (follow self-promotion rules)
+
+### Content Strategy
+
+#### Target Keywords
+
+These keywords target user intent (not developer intent):
+
+| Keyword | Search Intent | Content Idea |
+|---------|---------------|--------------|
+| convert json to csv online free | Direct tool search | Homepage optimization |
+| how to open json file in excel | Tutorial seekers | Blog post |
+| json to excel converter no signup | Privacy-conscious users | Highlight no-upload feature |
+| convert csv to json without coding | Non-technical users | Blog post |
+| nested json to csv | Users with complex data | Blog post about flattening |
+| excel to json converter online | Reverse conversion | Dedicated landing section |
+
+#### Blog Post Ideas
+
+1. **"How to Convert JSON to CSV Without Installing Software"**
+   - Target: Users searching for quick solutions
+   - Include screenshots of ParseWiz workflow
+
+2. **"Understanding JSON for Excel Users: A Non-Technical Guide"**
+   - Target: Excel users encountering JSON for first time
+   - Explain what JSON is, when they'll encounter it
+
+3. **"5 Ways to Handle Nested JSON Data (Without Coding)"**
+   - Target: Users with complex API exports
+   - Position ParseWiz's "Multiple Tables" feature
+
+4. **"CSV vs JSON vs Excel: Which Format Should You Use?"**
+   - Target: Educational content that attracts links
+   - Comparison table, when to use each format
+
+#### Future Enhancement: Dedicated Landing Pages
+
+Consider creating dedicated pages for each conversion type to rank for specific queries:
+- `/json-to-csv`
+- `/csv-to-json`
+- `/excel-to-json`
+- `/json-to-excel`
+
+### Action Plan Checklist
+
+#### Week 1: Directory Submissions
+- [ ] Submit to AlternativeTo
+- [ ] Submit to Product Hunt
+- [ ] Submit to SaaSHub
+- [ ] Submit to ToolPilot.ai
+
+#### Week 1: Community Posts
+- [ ] Post on r/excel
+- [ ] Post on r/analytics
+- [ ] Share on LinkedIn
+- [ ] Tweet with relevant hashtags
+
+#### Week 2-3: Content Creation
+- [ ] Write first blog post (JSON to CSV guide)
+- [ ] Write second blog post (nested JSON handling)
+
+#### Ongoing
+- [ ] Monitor Google Search Console for query data
+- [ ] Respond to questions on Quora
+- [ ] Update sitemap when adding new pages
