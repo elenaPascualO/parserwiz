@@ -33,7 +33,7 @@
 
 ## Phase 0 Summary (Complete)
 
-Phase 0 (MVP) completed January 2026 with 78 tests passing.
+Phase 0 (MVP) completed January 2026 with 91 tests passing.
 
 **Delivered:**
 - All 6 core conversions (JSON, CSV, Excel bidirectional)

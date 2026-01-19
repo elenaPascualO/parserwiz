@@ -232,26 +232,6 @@ details summary:focus-visible {
 
 ---
 
-### 11. Privacy Claim Clarification
-
-**Problem:** Messaging suggests client-side processing but files are uploaded.
-
-**Files to modify:**
-- `frontend/index.html` - Update disclaimer text
-
-**Implementation:**
-- [ ] Change footer disclaimer from:
-  > "Files are processed in memory and never stored on our servers."
-
-  To:
-  > "Files are uploaded securely for processing, then immediately deleted. We never store or access your data."
-
-- [ ] Update FAQ "Is my data safe?" answer similarly
-
-**Effort:** Tiny (10 min)
-
----
-
 ## Session Checklist
 
 Use this to track progress across sessions:

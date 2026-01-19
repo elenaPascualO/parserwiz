@@ -30,7 +30,7 @@ Web tool for conversion, cleaning, and manipulation of tabular data (JSON, CSV, 
 - [x] Security headers middleware
 - [x] Production CORS configuration
 
-**Status:** Complete. 78 tests passing. Deployed pending.
+**Status:** Complete. 91 tests passing. Deployed pending.
 
 ---
 
