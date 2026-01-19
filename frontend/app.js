@@ -47,6 +47,11 @@ const multiTableAccordion = document.getElementById('multi-table-accordion')
 const tableContainer = document.querySelector('.table-container')
 const paginationControls = document.querySelector('.pagination-controls')
 
+// Table scroll indicator elements
+const columnCount = document.getElementById('column-count')
+const tableWrapper = document.getElementById('table-wrapper')
+const scrollHint = document.getElementById('scroll-hint')
+
 // Marketing sections (hidden when working with files)
 const featuresSection = document.getElementById('features-section')
 const howItWorksSection = document.getElementById('how-it-works-section')
@@ -115,6 +120,10 @@ function init() {
 
     // Error close button
     errorCloseBtn.addEventListener('click', hideError)
+
+    // Table scroll indicator
+    tableContainer.addEventListener('scroll', updateScrollIndicator)
+    window.addEventListener('resize', updateScrollIndicator)
 }
 
 // Handle drag over
@@ -256,6 +265,9 @@ function showPreview(file, data) {
     const endRow = Math.min(startRow + data.rows.length - 1, data.total_rows)
     rowCount.textContent = `Showing ${startRow}-${endRow} of ${data.total_rows} rows`
 
+    // Update column count
+    columnCount.textContent = `${data.columns.length} columns`
+
     // Update pagination controls
     updatePaginationControls()
 
@@ -294,17 +306,50 @@ function showPreview(file, data) {
     howItWorksSection.classList.add('hidden')
 
     // Scroll table to top
-    const tableContainer = document.querySelector('.table-container')
-    if (tableContainer) {
-        tableContainer.scrollTop = 0
+    const tableContainerEl = document.querySelector('.table-container')
+    if (tableContainerEl) {
+        tableContainerEl.scrollTop = 0
+        tableContainerEl.scrollLeft = 0
     }
+
+    // Update scroll indicator after table renders
+    requestAnimationFrame(updateScrollIndicator)
 }
 
 // Update pagination controls state
 function updatePaginationControls() {
+    // Hide pagination entirely if only one page
+    if (totalPages <= 1) {
+        paginationControls.classList.add('hidden')
+        return
+    }
+
+    paginationControls.classList.remove('hidden')
     pageInfo.textContent = `Page ${currentPage} of ${totalPages}`
     prevPageBtn.disabled = currentPage <= 1
     nextPageBtn.disabled = currentPage >= totalPages
+}
+
+// Update horizontal scroll indicator
+function updateScrollIndicator() {
+    if (!tableContainer || !tableWrapper) return
+
+    const hasOverflow = tableContainer.scrollWidth > tableContainer.clientWidth
+    const scrolledToEnd = tableContainer.scrollLeft + tableContainer.clientWidth >= tableContainer.scrollWidth - 5
+
+    // Show/hide the fade effect on right edge
+    if (hasOverflow && !scrolledToEnd) {
+        tableWrapper.classList.add('has-scroll-right')
+    } else {
+        tableWrapper.classList.remove('has-scroll-right')
+    }
+
+    // Show/hide scroll hint text
+    if (hasOverflow) {
+        scrollHint.classList.remove('hidden')
+    } else {
+        scrollHint.classList.add('hidden')
+    }
 }
 
 // Format cell value for display
@@ -323,9 +368,10 @@ function buildConvertButtons(detectedType) {
     convertButtons.innerHTML = ''
     const options = CONVERSION_OPTIONS[detectedType] || []
 
-    options.forEach(format => {
+    options.forEach((format, index) => {
         const button = document.createElement('button')
-        button.className = 'convert-btn'
+        // First option is primary (most common conversion), others are secondary
+        button.className = index === 0 ? 'convert-btn' : 'convert-btn convert-btn-secondary'
         button.textContent = `Download as ${format}`
         button.addEventListener('click', () => convertFile(format.toLowerCase()))
         convertButtons.appendChild(button)
@@ -435,7 +481,14 @@ function resetUI() {
     btnMultiFile.classList.add('active')
     btnSingleFile.classList.remove('active')
 
+    // Reset scroll indicator
+    scrollHint.classList.add('hidden')
+    tableWrapper.classList.remove('has-scroll-right')
+
     hideError()
+
+    // Scroll page to top
+    window.scrollTo(0, 0)
 }
 
 // Show raw editor for malformed files
@@ -914,4 +967,7 @@ async function handleFeedbackSubmit(e) {
 document.addEventListener('DOMContentLoaded', () => {
     init()
     initFeedback()
+
+    // Ensure page starts at top (browsers may remember scroll position on refresh)
+    window.scrollTo(0, 0)
 })
