@@ -381,11 +381,11 @@ All responses must include the following headers:
 **Content-Security-Policy (for HTML responses):**
 ```
 default-src 'self';
-script-src 'self' https://cloud.umami.is;
+script-src 'self' 'sha256-A3rV7o/QCZxbnvydoVZHQdDg+GBdlkyPSb3ub/R/8Xg=' https://cloud.umami.is https://eu-assets.i.posthog.com;
 style-src 'self' 'unsafe-inline';
 img-src 'self' data:;
 font-src 'self';
-connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev;
+connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev https://eu.i.posthog.com;
 frame-ancestors 'none';
 base-uri 'self';
 form-action 'self';
