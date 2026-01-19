@@ -267,25 +267,87 @@ Consider creating dedicated pages for each conversion type to rank for specific 
 - `/excel-to-json`
 - `/json-to-excel`
 
-### Action Plan Checklist
+### Action Plan
 
-#### Week 1: Directory Submissions
-- [ ] Submit to AlternativeTo
-- [ ] Submit to Product Hunt
-- [ ] Submit to SaaSHub
-- [ ] Submit to ToolPilot.ai
+This is the phased action plan for growing ParseWiz visibility. Work through phases in order.
 
-#### Week 1: Community Posts
-- [ ] Post on r/excel
-- [ ] Post on r/analytics
-- [ ] Share on LinkedIn
-- [ ] Tweet with relevant hashtags
+#### Phase 1: On-Page Improvements ✅ COMPLETED
 
-#### Week 2-3: Content Creation
-- [ ] Write first blog post (JSON to CSV guide)
-- [ ] Write second blog post (nested JSON handling)
+Improve the homepage to better communicate value and rank for target keywords.
 
-#### Ongoing
-- [ ] Monitor Google Search Console for query data
-- [ ] Respond to questions on Quora
-- [ ] Update sitemap when adding new pages
+- [x] Add "Features" section highlighting the 3 key differentiators
+- [x] Add "How It Works" section (3-step visual guide)
+- [x] Update meta description to emphasize error fixing + complex JSON handling
+- [x] Add FAQ section (helps SEO with question-based queries)
+- [x] Update structured data (JSON-LD) to include new features
+
+#### Phase 2: Directory Submissions
+
+Submit to tool directories for passive discovery and backlinks.
+
+| Directory | URL | Status |
+|-----------|-----|--------|
+| AlternativeTo | https://alternativeto.net | [ ] Not started |
+| Product Hunt | https://producthunt.com | [ ] Not started |
+| SaaSHub | https://saashub.com | [ ] Not started |
+| ToolPilot.ai | https://toolpilot.ai | [ ] Not started |
+| Slant | https://slant.co | [ ] Not started |
+
+**Notes:**
+- AlternativeTo: List as alternative to ConvertCSV, JSON-CSV.com
+- Product Hunt: Best to launch Tuesday-Thursday. Prepare tagline, description, screenshots.
+
+#### Phase 3: Landing Pages
+
+Create dedicated pages for each conversion type to rank for high-intent keywords.
+
+| Page | Target Keywords | Status |
+|------|-----------------|--------|
+| `/json-to-csv` | "json to csv converter", "convert json to csv online" | [ ] Not started |
+| `/csv-to-json` | "csv to json converter", "convert csv to json" | [ ] Not started |
+| `/json-to-excel` | "json to excel converter", "open json in excel" | [ ] Not started |
+| `/excel-to-json` | "excel to json converter" | [ ] Not started |
+
+**Each landing page should include:**
+- Specific H1 (e.g., "Convert JSON to CSV Online - Free")
+- Brief explanation of the conversion and when users need it
+- The converter tool (same as homepage)
+- FAQ section specific to that conversion
+- Structured data for the page
+
+**After creating pages:**
+- [ ] Update sitemap.xml with new pages
+- [ ] Submit updated sitemap to Google Search Console
+- [ ] Submit updated sitemap to Bing Webmaster Tools
+
+#### Phase 4: Community Posts
+
+Active promotion in relevant communities.
+
+| Community | Where to Post | Status |
+|-----------|---------------|--------|
+| Reddit | r/excel | [ ] Not started |
+| Reddit | r/analytics | [ ] Not started |
+| Reddit | r/datasets | [ ] Not started |
+| LinkedIn | Personal profile + data analyst groups | [ ] Not started |
+| Twitter/X | With #DataAnalytics #Excel hashtags | [ ] Not started |
+
+**Post templates are in the "Messaging Guidelines" section above.**
+
+#### Phase 5: Blog Content (Optional/Ongoing)
+
+Once landing pages are done, blog posts can target educational queries.
+
+| Blog Post Idea | Target Keyword | Status |
+|----------------|----------------|--------|
+| "How to Convert JSON to CSV Without Installing Software" | "json to csv without software" | [ ] Not started |
+| "Understanding JSON for Excel Users" | "what is json file excel" | [ ] Not started |
+| "How to Handle Nested JSON Data" | "nested json to csv" | [ ] Not started |
+| "CSV vs JSON vs Excel: When to Use Each" | "csv vs json" | [ ] Not started |
+
+#### Ongoing Tasks
+
+- [ ] Monitor Google Search Console weekly for new query data
+- [ ] Check Bing Webmaster Tools for indexing status
+- [ ] Respond to relevant questions on Quora
+- [ ] Update this document as tasks are completed

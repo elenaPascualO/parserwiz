@@ -6,7 +6,7 @@
     <title>ParseWiz - Convert JSON, CSV, Excel Files Online Free</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Free online tool to convert JSON, CSV, and Excel files instantly. No signup required. Transform data formats, preview before download, handle complex nested JSON structures.">
+    <meta name="description" content="Free online JSON, CSV, Excel converter with built-in error fixing. Preview data before download, handle complex nested JSON with smart export options. No signup required.">
     <meta name="keywords" content="JSON to CSV, CSV to JSON, Excel converter, data conversion, JSON to Excel, CSV to Excel, file converter, data transformation, online converter">
     <meta name="author" content="ParseWiz">
     <meta name="robots" content="index, follow">
@@ -40,7 +40,7 @@
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "ParseWiz",
-        "description": "Free online tool to convert JSON, CSV, and Excel files instantly. No signup required.",
+        "description": "Free online JSON, CSV, Excel converter with built-in error fixing. Preview data before download, handle complex nested JSON with smart export options.",
         "url": "https://www.parsewiz.app/",
         "applicationCategory": "UtilitiesApplication",
         "operatingSystem": "Any",
@@ -56,8 +56,9 @@
             "JSON to Excel conversion",
             "CSV to Excel conversion",
             "Excel to CSV conversion",
-            "Data preview before download",
-            "Complex nested JSON handling"
+            "Built-in JSON error fixing with inline editor",
+            "Table-view preview before download",
+            "Smart complex nested JSON handling with multiple export options"
         ]
     }
     </script>
@@ -90,6 +91,86 @@
                             Select file
                             <input type="file" id="file-input" accept=".json,.csv,.xlsx,.xls" hidden>
                         </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section id="features-section" class="features-section">
+                <h2 class="features-title">Why ParseWiz?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                        </div>
+                        <h3>Fix JSON Errors Inline</h3>
+                        <p>Got a "Parse Error"? No need to open another tool. See exactly where the error is and fix it right here.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <line x1="3" y1="9" x2="21" y2="9"/>
+                                <line x1="9" y1="21" x2="9" y2="9"/>
+                            </svg>
+                        </div>
+                        <h3>Preview Before Download</h3>
+                        <p>See your data in a real table with pagination before downloading. No more converting blindly.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <path d="M12 18v-6"/>
+                                <path d="M9 15l3 3 3-3"/>
+                            </svg>
+                        </div>
+                        <h3>Smart Complex JSON</h3>
+                        <p>Nested arrays and objects? Choose between multiple linked tables or a single compact file.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works Section -->
+            <section id="how-it-works-section" class="how-it-works-section">
+                <h2 class="how-it-works-title">How It Works</h2>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Upload</h3>
+                            <p>Drop your JSON, CSV, or Excel file</p>
+                        </div>
+                    </div>
+                    <div class="step-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Preview</h3>
+                            <p>Review your data in table format</p>
+                        </div>
+                    </div>
+                    <div class="step-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Download</h3>
+                            <p>Get your file in the format you need</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -201,6 +282,33 @@
             <!-- Error Message -->
             <div id="error-message" class="error-message hidden"></div>
         </main>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h2 class="faq-title">Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <details class="faq-item">
+                    <summary>How do I convert JSON to CSV?</summary>
+                    <p>Simply drag and drop your JSON file onto the upload area (or click to select it). ParseWiz will automatically detect the format, show you a preview, and let you download as CSV with one click.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>What if my JSON file has errors?</summary>
+                    <p>Unlike other converters that just show "Parse Error", ParseWiz opens an inline editor showing exactly where the error is. Fix it directly in your browser and retry - no need to open another tool.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Can I convert nested or complex JSON?</summary>
+                    <p>Yes! ParseWiz detects complex structures automatically and offers two export options: split into multiple linked tables (with automatic record IDs for easy joining) or keep everything in a single compact row.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Is my data safe?</summary>
+                    <p>Your files are processed entirely in your browser. Nothing is uploaded to any server. When you close the page, your data is gone - we never store or access your files.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>What file formats are supported?</summary>
+                    <p>ParseWiz supports JSON, CSV, and Excel files (.xlsx, .xls). You can convert between any of these formats freely.</p>
+                </details>
+            </div>
+        </section>
 
         <footer>
             <!-- Privacy Disclaimer -->

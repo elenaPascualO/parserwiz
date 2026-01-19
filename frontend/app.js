@@ -44,6 +44,10 @@ const multiTableAccordion = document.getElementById('multi-table-accordion')
 const tableContainer = document.querySelector('.table-container')
 const paginationControls = document.querySelector('.pagination-controls')
 
+// Marketing sections (hidden when working with files)
+const featuresSection = document.getElementById('features-section')
+const howItWorksSection = document.getElementById('how-it-works-section')
+
 // Conversion options per file type
 const CONVERSION_OPTIONS = {
     json: ['CSV', 'Excel'],
@@ -254,6 +258,8 @@ function showPreview(file, data) {
     uploadSection.classList.add('hidden')
     editorSection.classList.add('hidden')
     previewSection.classList.remove('hidden')
+    featuresSection.classList.add('hidden')
+    howItWorksSection.classList.add('hidden')
 
     // Scroll table to top
     const tableContainer = document.querySelector('.table-container')
@@ -380,6 +386,8 @@ function resetUI() {
     previewSection.classList.add('hidden')
     editorSection.classList.add('hidden')
     exportModeSection.classList.add('hidden')
+    featuresSection.classList.remove('hidden')
+    howItWorksSection.classList.remove('hidden')
 
     // Reset preview mode toggle and accordion
     previewModeToggle.classList.add('hidden')
@@ -414,6 +422,8 @@ async function showRawEditor(file, errorMessage) {
         uploadSection.classList.add('hidden')
         previewSection.classList.add('hidden')
         editorSection.classList.remove('hidden')
+        featuresSection.classList.add('hidden')
+        howItWorksSection.classList.add('hidden')
     } catch (err) {
         // Fallback if file can't be read
         resetUI()
@@ -496,6 +506,8 @@ function showExportModeChoice(analysis) {
     previewSection.classList.add('hidden')
     editorSection.classList.add('hidden')
     exportModeSection.classList.remove('hidden')
+    featuresSection.classList.add('hidden')
+    howItWorksSection.classList.add('hidden')
 }
 
 // Proceed with selected export mode
@@ -592,6 +604,8 @@ function showComplexJsonPreview(file, multiData, singleData) {
     uploadSection.classList.add('hidden')
     editorSection.classList.add('hidden')
     previewSection.classList.remove('hidden')
+    featuresSection.classList.add('hidden')
+    howItWorksSection.classList.add('hidden')
 
     // Set initial view to multi-file
     setPreviewMode('multi')
