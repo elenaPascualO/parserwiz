@@ -117,7 +117,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
                 "img-src 'self' data:; "
                 "font-src 'self'; "
                 "connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev "
-                "https://eu.i.posthog.com; "
+                "https://eu.i.posthog.com https://eu-assets.i.posthog.com; "
                 "frame-ancestors 'none'; "
                 "base-uri 'self'; "
                 "form-action 'self'"

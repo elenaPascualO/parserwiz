@@ -385,7 +385,7 @@ script-src 'self' 'sha256-A3rV7o/QCZxbnvydoVZHQdDg+GBdlkyPSb3ub/R/8Xg=' https://
 style-src 'self' 'unsafe-inline';
 img-src 'self' data:;
 font-src 'self';
-connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev https://eu.i.posthog.com;
+connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev https://eu.i.posthog.com https://eu-assets.i.posthog.com;
 frame-ancestors 'none';
 base-uri 'self';
 form-action 'self';
