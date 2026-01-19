@@ -180,6 +180,14 @@ async function processFile(file, page = 1) {
     // Show file selected feedback immediately (only on first page)
     if (page === 1) {
         showSelectedFile(file)
+
+        // PostHog Analytics: Track file upload event
+        if (typeof posthog !== 'undefined') {
+            posthog.capture('file_uploaded', {
+                file_type: file.name.split('.').pop().toLowerCase(),
+                file_size_kb: Math.round(file.size / 1024)
+            })
+        }
     }
 
     showLoading()
@@ -314,6 +322,15 @@ function showPreview(file, data) {
 
     // Update scroll indicator after table renders
     requestAnimationFrame(updateScrollIndicator)
+
+    // PostHog Analytics: Track successful preview
+    if (typeof posthog !== 'undefined') {
+        posthog.capture('preview_shown', {
+            file_type: data.detected_type,
+            row_count: data.total_rows,
+            column_count: data.columns.length
+        })
+    }
 }
 
 // Update pagination controls state
@@ -393,6 +410,15 @@ async function convertFile(format) {
     }
     const outputFormat = formatMap[format] || format
 
+    // PostHog Analytics: Track conversion start
+    if (typeof posthog !== 'undefined') {
+        posthog.capture('conversion_started', {
+            from_format: cachedDetectedType,
+            to_format: outputFormat,
+            export_mode: selectedExportMode
+        })
+    }
+
     try {
         const formData = new FormData()
         formData.append('file', currentFile)
@@ -423,6 +449,14 @@ async function convertFile(format) {
         // Download the file
         const blob = await response.blob()
         downloadBlob(blob, downloadName)
+
+        // PostHog Analytics: Track conversion completion
+        if (typeof posthog !== 'undefined') {
+            posthog.capture('conversion_completed', {
+                from_format: cachedDetectedType,
+                to_format: outputFormat
+            })
+        }
     } catch (error) {
         showError(error.message)
     } finally {
@@ -558,7 +592,19 @@ async function retryParse() {
 
     // Update current file reference and retry
     currentFile = editedFile
+
+    // Store section visibility before processing to track success
+    const wasInEditor = !editorSection.classList.contains('hidden')
+
     await processFile(editedFile, 1)
+
+    // PostHog Analytics: Track JSON edit retry result
+    if (wasInEditor && typeof posthog !== 'undefined') {
+        const success = !editorSection.classList.contains('hidden') === false
+        posthog.capture('json_edit_retry', {
+            success: success
+        })
+    }
 }
 
 // Analyze JSON file for complexity
@@ -588,6 +634,14 @@ function showExportModeChoice(analysis) {
         .map(a => `${a.path} (${a.count} items)`)
         .join(', ')
     complexityInfo.innerHTML = `Found ${analysis.arrays_found.length} arrays that would expand to <strong>${analysis.estimated_rows.toLocaleString()} rows</strong>: ${arraysText}.<br><small>Formula: ${analysis.expansion_formula}</small>`
+
+    // PostHog Analytics: Track complex JSON detection
+    if (typeof posthog !== 'undefined') {
+        posthog.capture('complex_json_detected', {
+            estimated_rows: analysis.estimated_rows,
+            arrays_count: analysis.arrays_found.length
+        })
+    }
 
     // Show export mode section, hide others
     uploadSection.classList.add('hidden')
@@ -777,6 +831,13 @@ function setPreviewMode(mode) {
     // Update selectedExportMode for download
     selectedExportMode = mode === 'multi' ? 'multi_table' : 'single_row'
 
+    // PostHog Analytics: Track export mode selection (only for complex JSON)
+    if (isComplexJson && typeof posthog !== 'undefined') {
+        posthog.capture('export_mode_selected', {
+            mode: mode === 'multi' ? 'multi' : 'single'
+        })
+    }
+
     if (mode === 'multi') {
         // Show accordion, hide table
         multiTableAccordion.classList.remove('hidden')
@@ -931,6 +992,11 @@ async function handleFeedbackSubmit(e) {
 
         // Show success message
         feedbackFormContainer.innerHTML = '<p class="feedback-success">Thank you for your feedback!</p>'
+
+        // PostHog Analytics: Track feedback submission
+        if (typeof posthog !== 'undefined') {
+            posthog.capture('feedback_submitted')
+        }
 
         // Reset after 3 seconds
         setTimeout(() => {
