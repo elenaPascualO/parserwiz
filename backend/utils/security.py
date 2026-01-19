@@ -111,7 +111,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         if "text/html" in content_type:
             response.headers["Content-Security-Policy"] = (
                 "default-src 'self'; "
-                "script-src 'self' 'sha256-A3rV7o/QCZxbnvydoVZHQdDg+GBdlkyPSb3ub/R/8Xg=' "
+                "script-src 'self' 'sha256-9pNK/EXSZU1uKlB1TltQ5lTrjUFNXpX+bOfJg7Cgu0c=' "
                 "https://cloud.umami.is https://eu-assets.i.posthog.com; "
                 "style-src 'self' 'unsafe-inline'; "
                 "img-src 'self' data:; "
