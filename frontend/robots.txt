@@ -1,4 +1,4 @@
-# robots.txt for DataToolkit
+# robots.txt for ParserWiz
 # https://www.robotstxt.org/
 
 # Allow all crawlers
@@ -6,4 +6,4 @@ User-agent: *
 Allow: /
 
 # Sitemap location (update with your actual domain)
-Sitemap: https://www.datatoolkit.pro/sitemap.xml
+Sitemap: https://www.parserwiz.app/sitemap.xml

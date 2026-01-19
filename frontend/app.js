@@ -1,4 +1,4 @@
-// DataToolkit Frontend Application
+// ParserWiz Frontend Application
 
 const API_BASE = '/api'
 

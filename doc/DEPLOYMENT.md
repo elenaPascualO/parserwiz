@@ -1,6 +1,6 @@
 # Railway Deployment Guide
 
-This guide covers deploying DataToolkit to Railway.
+This guide covers deploying ParserWiz to Railway.
 
 ## Prerequisites
 
@@ -79,7 +79,7 @@ Go to your service → **Variables** tab and add:
 | Variable | Value | Required |
 |----------|-------|----------|
 | `ENVIRONMENT` | `production` | Yes |
-| `ALLOWED_ORIGINS` | `https://www.datatoolkit.pro` | Yes |
+| `ALLOWED_ORIGINS` | `https://www.parserwiz.app` | Yes |
 | `DISCORD_WEBHOOK_URL` | Your Discord webhook URL | No |
 | `MAX_FILE_SIZE_MB` | `10` (default) | No |
 | `RAILPACK_PYTHON_VERSION` | `3.12` | Only if build fails |
@@ -106,7 +106,7 @@ curl https://your-railway-url.up.railway.app/api/health
 ### Railway side
 
 1. Go to **Settings** → **Networking** → **Custom Domain**
-2. Enter your domain (e.g., `datatoolkit.example.com`)
+2. Enter your domain (e.g., `parserwiz.example.com`)
 3. Railway provides a CNAME target
 
 ### DNS side
@@ -115,20 +115,20 @@ Add a CNAME record in your DNS provider:
 
 | Type | Name | Value |
 |------|------|-------|
-| CNAME | `datatoolkit` | `your-app.up.railway.app` |
+| CNAME | `parserwiz` | `your-app.up.railway.app` |
 
 ### Update CORS
 
 After adding your custom domain, update `ALLOWED_ORIGINS`:
 
 ```
-ALLOWED_ORIGINS=https://datatoolkit.example.com
+ALLOWED_ORIGINS=https://parserwiz.example.com
 ```
 
 For multiple origins (comma-separated):
 
 ```
-ALLOWED_ORIGINS=https://datatoolkit.example.com,https://www.datatoolkit.example.com
+ALLOWED_ORIGINS=https://parserwiz.example.com,https://www.parserwiz.example.com
 ```
 
 **Hobby plan limit**: 2 custom domains per service.

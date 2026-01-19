@@ -1,4 +1,4 @@
-# Phase 0 — MVP DataToolkit (Complete)
+# Phase 0 — MVP ParserWiz (Complete)
 
 **Status:** Complete (January 2026) - 78 tests passing
 
@@ -58,7 +58,7 @@ Launch a functional MVP to validate real demand for a JSON ↔ CSV ↔ Excel con
 ### Main Screen
 ```
 ┌─────────────────────────────────────────────┐
-│  🔄 DataToolkit                             │
+│  🔄 ParserWiz                             │
 │                                             │
 │  ┌─────────────────────────────────────┐   │
 │  │                                     │   │
@@ -96,7 +96,7 @@ Launch a functional MVP to validate real demand for a JSON ↔ CSV ↔ Excel con
 ## File Structure
 
 ```
-datatoolkit/
+parserwiz/
 ├── backend/
 │   ├── main.py              # FastAPI app
 │   ├── converters/

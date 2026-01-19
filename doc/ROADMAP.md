@@ -1,4 +1,4 @@
-# DataToolkit — General Roadmap
+# ParserWiz — General Roadmap
 
 ## Vision
 Web tool for conversion, cleaning, and manipulation of tabular data (JSON, CSV, Excel). Start simple, grow with features that deliver real value.

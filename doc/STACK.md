@@ -1,4 +1,4 @@
-# Technical Stack — DataToolkit
+# Technical Stack — ParserWiz
 
 ## Summary
 
@@ -211,7 +211,7 @@ brew install uv
 ```bash
 # Clone repo
 git clone <repo-url>
-cd datatoolkit
+cd parserwiz
 
 # Initialize project with uv (creates pyproject.toml)
 uv init

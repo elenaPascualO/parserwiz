@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1e40af"/>
-      <stop offset="100%" style="stop-color:#2563eb"/>
+      <stop offset="0%" style="stop-color:#5b21b6"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
     </linearGradient>
     <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#60a5fa"/>
-      <stop offset="100%" style="stop-color:#3b82f6"/>
+      <stop offset="0%" style="stop-color:#a78bfa"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
     </linearGradient>
   </defs>
 
@@ -25,20 +25,22 @@
     <line x1="1100" y1="0" x2="1100" y2="630" stroke="white" stroke-width="1"/>
   </g>
 
-  <!-- Logo icon (larger version of favicon) -->
+  <!-- Logo icon (larger version of favicon with P) -->
   <g transform="translate(100, 215)">
     <rect x="0" y="0" width="200" height="200" rx="40" fill="white"/>
     <g transform="translate(25, 25)">
       <rect x="0" y="0" width="150" height="150" rx="30" fill="url(#iconGrad)"/>
-      <path d="M35 30h45c25 0 45 20 45 45s-20 45-45 45H35V30z" fill="none" stroke="white" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="55" cy="55" r="8" fill="white"/>
-      <circle cx="55" cy="95" r="8" fill="white"/>
-      <circle cx="80" cy="75" r="8" fill="white"/>
+      <!-- Letter P stylized -->
+      <path d="M45 30v90M45 30h35c18 0 32 14 32 32s-14 32-32 32H45" fill="none" stroke="white" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Data parsing dots -->
+      <circle cx="100" cy="100" r="8" fill="white" opacity="0.9"/>
+      <circle cx="118" cy="118" r="8" fill="white" opacity="0.7"/>
+      <circle cx="82" cy="118" r="8" fill="white" opacity="0.5"/>
     </g>
   </g>
 
   <!-- Text content -->
-  <text x="350" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="700" fill="white">DataToolkit</text>
+  <text x="350" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="700" fill="white">ParserWiz</text>
   <text x="350" y="350" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="rgba(255,255,255,0.9)">Convert JSON, CSV, and Excel files instantly</text>
 
   <!-- Feature badges -->
@@ -54,5 +56,5 @@
   </g>
 
   <!-- URL at bottom -->
-  <text x="600" y="580" font-family="system-ui, sans-serif" font-size="24" fill="rgba(255,255,255,0.7)" text-anchor="middle">www.datatoolkit.pro</text>
+  <text x="600" y="580" font-family="system-ui, sans-serif" font-size="24" fill="rgba(255,255,255,0.7)" text-anchor="middle">www.parserwiz.app</text>
 </svg>

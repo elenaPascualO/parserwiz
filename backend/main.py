@@ -1,4 +1,4 @@
-"""FastAPI application for DataToolkit."""
+"""FastAPI application for ParserWiz."""
 
 import io
 import zipfile
@@ -32,7 +32,7 @@ from backend.utils.security import SecurityHeadersMiddleware, encode_filename_he
 from backend.utils.validators import validate_file
 
 app = FastAPI(
-    title="DataToolkit",
+    title="ParserWiz",
     description="Web tool for conversion of tabular data (JSON, CSV, Excel)",
     version="0.1.0",
 )
@@ -426,4 +426,4 @@ async def root():
     index_path = frontend_path / "index.html"
     if index_path.exists():
         return FileResponse(index_path)
-    return {"message": "DataToolkit API", "docs": "/docs"}
+    return {"message": "ParserWiz API", "docs": "/docs"}

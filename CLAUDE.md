@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DataToolkit is a web tool for conversion, cleaning, and manipulation of tabular data (JSON, CSV, Excel). Currently in **Phase 1** (Consolidate Conversions) - adding JSON transformations, new formats, and security hardening. Phase 0 (MVP) is complete with 78 tests passing.
+ParserWiz is a web tool for conversion, cleaning, and manipulation of tabular data (JSON, CSV, Excel). Currently in **Phase 1** (Consolidate Conversions) - adding JSON transformations, new formats, and security hardening. Phase 0 (MVP) is complete with 78 tests passing.
 
 ## Tech Stack
 

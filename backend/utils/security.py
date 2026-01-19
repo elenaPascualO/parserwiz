@@ -1,4 +1,4 @@
-"""Security utilities for DataToolkit."""
+"""Security utilities for ParserWiz."""
 
 import os
 import re

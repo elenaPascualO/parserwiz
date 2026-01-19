@@ -1,4 +1,4 @@
-"""Configuration settings for DataToolkit."""
+"""Configuration settings for ParserWiz."""
 
 import os
 

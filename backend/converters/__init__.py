@@ -1,4 +1,4 @@
-"""Converter modules for DataToolkit."""
+"""Converter modules for ParserWiz."""
 
 from backend.converters.csv_to_excel import CsvToExcelConverter
 from backend.converters.csv_to_json import CsvToJsonConverter

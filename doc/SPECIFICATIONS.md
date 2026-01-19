@@ -1,8 +1,8 @@
-# DataToolkit — Technical Specifications
+# ParserWiz — Technical Specifications
 
 ## 1. Overview
 
-**Product Name:** DataToolkit
+**Product Name:** ParserWiz
 **Version:** 0.2.0 (Phase 1 - Consolidate Conversions)
 **Purpose:** Web tool for conversion, cleaning, and manipulation of tabular data (JSON, CSV, Excel)
 
