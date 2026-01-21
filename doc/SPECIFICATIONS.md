@@ -59,6 +59,10 @@ Phase 1 in progress. Phase 0 (MVP) complete with 91 tests passing. See `doc/PHAS
 - Privacy disclaimer in footer
 - Feedback form (Discord webhook integration)
 - **PWA Support:** Installable on mobile devices (iOS/Android home screen)
+  - Service worker for offline caching
+  - Web app manifest with icons
+  - Install button appears when app is installable (via `beforeinstallprompt` event)
+  - Button hidden when already installed or running in standalone mode
 
 #### Complex JSON Handling
 - Automatic complexity detection (threshold: >100 estimated rows from multiple arrays)
@@ -579,3 +583,4 @@ See `doc/ROADMAP.md` for planned features:
 | 0.1.3 | 2026-01 | Simplified complex JSON UX: info screen + tabbed preview instead of selection dialog |
 | 0.2.0 | 2026-01 | Phase 1 started: JSON transformations, new formats, security hardening |
 | 0.2.1 | 2026-01 | Added PWA support: manifest, service worker, installable on mobile |
+| 0.2.2 | 2026-01 | Added PWA install button with beforeinstallprompt handling |

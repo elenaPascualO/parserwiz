@@ -56,6 +56,10 @@ const scrollHint = document.getElementById('scroll-hint')
 const featuresSection = document.getElementById('features-section')
 const howItWorksSection = document.getElementById('how-it-works-section')
 
+// PWA Install prompt elements
+const installPrompt = document.getElementById('install-prompt')
+const installButton = document.getElementById('install-button')
+
 // Conversion options per file type
 const CONVERSION_OPTIONS = {
     json: ['CSV', 'Excel'],
@@ -1029,6 +1033,59 @@ async function handleFeedbackSubmit(e) {
     }
 }
 
+// PWA Install Prompt handling
+let deferredInstallPrompt = null
+
+function initInstallPrompt() {
+    // Listen for the beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent the default mini-infobar from appearing
+        e.preventDefault()
+        // Store the event for later use
+        deferredInstallPrompt = e
+        // Show the install button
+        if (installPrompt) {
+            installPrompt.classList.remove('hidden')
+            console.log('[PWA] Install prompt available')
+        }
+    })
+
+    // Handle install button click
+    if (installButton) {
+        installButton.addEventListener('click', async () => {
+            if (!deferredInstallPrompt) {
+                return
+            }
+            // Show the install prompt
+            deferredInstallPrompt.prompt()
+            // Wait for the user's response
+            const { outcome } = await deferredInstallPrompt.userChoice
+            console.log('[PWA] Install prompt outcome:', outcome)
+            // Clear the deferred prompt - it can only be used once
+            deferredInstallPrompt = null
+            // Hide the install button
+            installPrompt.classList.add('hidden')
+        })
+    }
+
+    // Hide install button if app is already installed
+    window.addEventListener('appinstalled', () => {
+        console.log('[PWA] App installed')
+        deferredInstallPrompt = null
+        if (installPrompt) {
+            installPrompt.classList.add('hidden')
+        }
+    })
+
+    // Check if running as installed PWA (standalone mode)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log('[PWA] Running in standalone mode')
+        if (installPrompt) {
+            installPrompt.classList.add('hidden')
+        }
+    }
+}
+
 // Register Service Worker for PWA
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
@@ -1060,6 +1117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     init()
     initFeedback()
     registerServiceWorker()
+    initInstallPrompt()
 
     // Ensure page starts at top (browsers may remember scroll position on refresh)
     window.scrollTo(0, 0)
