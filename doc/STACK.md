@@ -348,11 +348,16 @@ See `doc/SPECIFICATIONS.md` Section 6 for full security specifications.
 
 ---
 
-## Monitoring (Future)
+## Monitoring
 
+### Implemented
 | Tool | Purpose |
 |------|---------|
-| Plausible / Umami | Privacy-focused analytics |
+| Umami Cloud | Privacy-focused analytics (pageviews + custom events) |
+
+### Future
+| Tool | Purpose |
+|------|---------|
 | Sentry | Error tracking |
 | UptimeRobot | Uptime monitoring |
 

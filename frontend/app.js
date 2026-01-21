@@ -181,9 +181,9 @@ async function processFile(file, page = 1) {
     if (page === 1) {
         showSelectedFile(file)
 
-        // PostHog Analytics: Track file upload event
-        if (typeof posthog !== 'undefined') {
-            posthog.capture('file_uploaded', {
+        // Umami Analytics: Track file upload event
+        if (typeof umami !== 'undefined') {
+            umami.track('file_uploaded', {
                 file_type: file.name.split('.').pop().toLowerCase(),
                 file_size_kb: Math.round(file.size / 1024)
             })
@@ -323,9 +323,9 @@ function showPreview(file, data) {
     // Update scroll indicator after table renders
     requestAnimationFrame(updateScrollIndicator)
 
-    // PostHog Analytics: Track successful preview
-    if (typeof posthog !== 'undefined') {
-        posthog.capture('preview_shown', {
+    // Umami Analytics: Track successful preview
+    if (typeof umami !== 'undefined') {
+        umami.track('preview_shown', {
             file_type: data.detected_type,
             row_count: data.total_rows,
             column_count: data.columns.length
@@ -410,9 +410,9 @@ async function convertFile(format) {
     }
     const outputFormat = formatMap[format] || format
 
-    // PostHog Analytics: Track conversion start
-    if (typeof posthog !== 'undefined') {
-        posthog.capture('conversion_started', {
+    // Umami Analytics: Track conversion start
+    if (typeof umami !== 'undefined') {
+        umami.track('conversion_started', {
             from_format: cachedDetectedType,
             to_format: outputFormat,
             export_mode: selectedExportMode
@@ -450,9 +450,9 @@ async function convertFile(format) {
         const blob = await response.blob()
         downloadBlob(blob, downloadName)
 
-        // PostHog Analytics: Track conversion completion
-        if (typeof posthog !== 'undefined') {
-            posthog.capture('conversion_completed', {
+        // Umami Analytics: Track conversion completion
+        if (typeof umami !== 'undefined') {
+            umami.track('conversion_completed', {
                 from_format: cachedDetectedType,
                 to_format: outputFormat
             })
@@ -598,10 +598,10 @@ async function retryParse() {
 
     await processFile(editedFile, 1)
 
-    // PostHog Analytics: Track JSON edit retry result
-    if (wasInEditor && typeof posthog !== 'undefined') {
+    // Umami Analytics: Track JSON edit retry result
+    if (wasInEditor && typeof umami !== 'undefined') {
         const success = !editorSection.classList.contains('hidden') === false
-        posthog.capture('json_edit_retry', {
+        umami.track('json_edit_retry', {
             success: success
         })
     }
@@ -635,9 +635,9 @@ function showExportModeChoice(analysis) {
         .join(', ')
     complexityInfo.innerHTML = `Found ${analysis.arrays_found.length} arrays that would expand to <strong>${analysis.estimated_rows.toLocaleString()} rows</strong>: ${arraysText}.<br><small>Formula: ${analysis.expansion_formula}</small>`
 
-    // PostHog Analytics: Track complex JSON detection
-    if (typeof posthog !== 'undefined') {
-        posthog.capture('complex_json_detected', {
+    // Umami Analytics: Track complex JSON detection
+    if (typeof umami !== 'undefined') {
+        umami.track('complex_json_detected', {
             estimated_rows: analysis.estimated_rows,
             arrays_count: analysis.arrays_found.length
         })
@@ -831,9 +831,9 @@ function setPreviewMode(mode) {
     // Update selectedExportMode for download
     selectedExportMode = mode === 'multi' ? 'multi_table' : 'single_row'
 
-    // PostHog Analytics: Track export mode selection (only for complex JSON)
-    if (isComplexJson && typeof posthog !== 'undefined') {
-        posthog.capture('export_mode_selected', {
+    // Umami Analytics: Track export mode selection (only for complex JSON)
+    if (isComplexJson && typeof umami !== 'undefined') {
+        umami.track('export_mode_selected', {
             mode: mode === 'multi' ? 'multi' : 'single'
         })
     }
@@ -993,9 +993,9 @@ async function handleFeedbackSubmit(e) {
         // Show success message
         feedbackFormContainer.innerHTML = '<p class="feedback-success">Thank you for your feedback!</p>'
 
-        // PostHog Analytics: Track feedback submission
-        if (typeof posthog !== 'undefined') {
-            posthog.capture('feedback_submitted')
+        // Umami Analytics: Track feedback submission
+        if (typeof umami !== 'undefined') {
+            umami.track('feedback_submitted')
         }
 
         // Reset after 3 seconds
