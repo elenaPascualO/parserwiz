@@ -66,12 +66,16 @@ Phase 1 in progress. Phase 0 (MVP) complete with 91 tests passing. See `doc/PHAS
 
 #### Complex JSON Handling
 - Automatic complexity detection (threshold: >100 estimated rows from multiple arrays)
+- Detects both arrays of objects (`[{...}]`) and arrays of primitives (`["a", "b"]`)
 - Info screen explains detected complexity with "Next" button
 - Tip explaining `_record_id` column (auto-added to link related records across tables)
 - Tabbed preview to compare export options:
   - **Multi-file**: Accordion view showing each table (all collapsed by default)
+    - Tables with ≤10 arrays show up to 100 rows with scroll
+    - Tables with >10 arrays show 5 rows (compact mode)
   - **Single-file**: Compact view with arrays as JSON text columns
 - Download uses the currently selected tab's export mode
+- Primitive arrays in multi-file mode create tables with `_record_id` and `value` columns
 
 #### Preview UX Enhancements
 - Hover hint message above tables ("💡 Hover over cells to view full content")
@@ -146,9 +150,9 @@ Response:
   "is_complex": true,
   "estimated_rows": 272160,
   "arrays_found": [
-    {"path": "artists", "count": 3},
-    {"path": "tracks", "count": 6},
-    {"path": "videos", "count": 4}
+    {"path": "artists", "count": 3, "type": "objects"},
+    {"path": "tracks", "count": 6, "type": "objects"},
+    {"path": "tags", "count": 4, "type": "primitives"}
   ],
   "expansion_formula": "3 × 6 × 4 = 72"
 }
@@ -156,6 +160,7 @@ Response:
 Notes:
 - Only meaningful for JSON files
 - Non-JSON files return is_complex: false
+- "type" field: "objects" for arrays of objects, "primitives" for arrays of strings/numbers/booleans
 - JSON is "complex" if it has 2+ arrays AND estimated_rows > 100
 ```
 

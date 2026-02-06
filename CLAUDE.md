@@ -100,6 +100,7 @@ Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 See `doc/` folder for detailed specifications:
 - `SPECIFICATIONS.md` - Comprehensive technical specifications (API, security, config)
 - `ROADMAP.md` - Project phases and feature roadmap
+- `PHASE2.md` - SQL Generator specifications (planned)
 - `PHASE1.md` - Current phase specifications (JSON transforms, formats, security)
 - `PHASE0.md` - MVP specifications (complete)
 - `STACK.md` - Technical stack details and commands

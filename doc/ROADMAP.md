@@ -65,6 +65,8 @@ See `doc/PHASE1.md` for detailed specifications.
 ## Phase 2 — SQL Generator
 **Goal:** Attract technical audience (developers, analysts).
 
+See `doc/PHASE2.md` for detailed specifications.
+
 - [ ] CSV/Excel → INSERT statements
 - [ ] CSV/Excel → CREATE TABLE + INSERTs
 - [ ] Dialect selector: MySQL, PostgreSQL, SQLite, SQL Server
