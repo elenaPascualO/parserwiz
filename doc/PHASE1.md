@@ -212,7 +212,7 @@ Or direct file download if `?download=true` query param.
 - [ ] Rate limit error handling (429 responses)
 
 ### Documentation
-- [ ] Update SPECIFICATIONS.md with new endpoints
+- [ ] Update SPEC.md with new endpoints
 - [ ] Update CLAUDE.md with new features
 - [ ] Add transformation examples to user guide
 
@@ -284,4 +284,4 @@ For rate limiting (when implemented):
 
 - Phase 0 completion: `doc/PHASE0.md`
 - Full roadmap: `doc/ROADMAP.md`
-- Technical specs: `doc/SPECIFICATIONS.md`
+- Technical specs: `doc/SPEC.md`

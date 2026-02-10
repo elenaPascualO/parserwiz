@@ -357,7 +357,7 @@ def infer_column_type(series: pd.Series) -> str:
 - [ ] Error handling for invalid table names
 
 ### Documentation
-- [ ] Update SPECIFICATIONS.md with SQL endpoints
+- [ ] Update SPEC.md with SQL endpoints
 - [ ] Update CLAUDE.md with new commands
 - [ ] Update ROADMAP.md to mark Phase 2 in progress
 - [ ] Add SQL generation examples to user guide
@@ -519,5 +519,5 @@ See `doc/SEO.md` for full SEO strategy.
 - Phase 0 (complete): `doc/PHASE0.md`
 - Phase 1 (in progress): `doc/PHASE1.md`
 - Full roadmap: `doc/ROADMAP.md`
-- Technical specs: `doc/SPECIFICATIONS.md`
+- Technical specs: `doc/SPEC.md`
 - SEO strategy: `doc/SEO.md`

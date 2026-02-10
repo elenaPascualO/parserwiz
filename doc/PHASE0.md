@@ -122,7 +122,7 @@ parsewiz/
 ├── README.md
 ├── ROADMAP.md
 ├── PHASE0.md
-└── STACK.md
+└── SPEC.md
 ```
 
 ---
@@ -248,7 +248,7 @@ Issues identified during usage that have been addressed:
 - [x] **Production CORS**: Environment-based CORS configuration
 - [x] **Security tests**: 20 tests covering security features
 
-See `doc/SPECIFICATIONS.md` for full security specifications.
+See `doc/SPEC.md` for full security specifications.
 
 ### Nested JSON Support (January 2026)
 

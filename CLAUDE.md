@@ -98,12 +98,11 @@ Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 ## Documentation
 
 See `doc/` folder for detailed specifications:
-- `SPECIFICATIONS.md` - Comprehensive technical specifications (API, security, config)
+- `SPEC.md` - Comprehensive technical specifications (API, security, config)
 - `ROADMAP.md` - Project phases and feature roadmap
-- `PHASE2.md` - SQL Generator specifications (planned)
 - `PHASE1.md` - Current phase specifications (JSON transforms, formats, security)
 - `PHASE0.md` - MVP specifications (complete)
-- `STACK.md` - Technical stack details and commands
+- `PHASE2.md` - SQL Generator specifications (planned)
 
 ## Environment Variables (Production)
 
@@ -115,7 +114,7 @@ MAX_FILE_SIZE_MB=10                   # Max upload size in MB
 
 ## General Guidelines
 
-1. **Plan first**: Think through the problem, read relevant files, and write a plan to `tasks/todo.md`
+1. **Plan first**: Think through the problem, read relevant files, and write a plan to `doc/tasks/todo.md`
 2. **Verify plan**: Check in with the user before beginning implementation
 3. **Track progress**: Mark todo items as complete as you go
 4. **Explain changes**: Provide high-level explanations of what you changed
