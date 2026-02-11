@@ -55,3 +55,7 @@ Thumbs.db
 
 # uv
 uv.lock
+
+# Documentation and project instructions
+doc/
+CLAUDE.md
